@@ -47,7 +47,7 @@ const track = {
   duration_ms: 0,
 };
 
-function Player(props) {
+function MusicPlayer(props) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(100);
   // const duration = 200;
@@ -161,4 +161,4 @@ function Player(props) {
   );
 }
 
-export default Player;
+export default MusicPlayer;

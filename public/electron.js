@@ -102,9 +102,6 @@ import_electron.ipcMain.on("pickMusic", async (event, folder) => {
   }
   event.returnValue = output;
 });
-import_electron.ipcMain.on("notify", (_, message) => {
-  new Notification({ title: "Notification", body: message }).show();
-});
 function createWindow() {
   const win = new import_electron.BrowserWindow({
     width: 800,

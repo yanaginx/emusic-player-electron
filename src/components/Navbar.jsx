@@ -1,6 +1,6 @@
 import { Button } from "@mui/material";
 
-function Navbar() {
+function Navbar({ player }) {
   const pickMusic = (folder) => {
     let data = electron.playerApi.pickMusic(folder);
 
@@ -12,17 +12,24 @@ function Navbar() {
     <>
       <Button
         onClick={() => {
-          pickMusic(true);
+          player.pickMusic(true);
         }}
       >
         Click for choosing folder
       </Button>
       <Button
         onClick={() => {
-          pickMusic(false);
+          player.pickMusic(false);
         }}
       >
         Click for choosing file
+      </Button>
+      <Button
+        onClick={() => {
+          player.saveProfiles();
+        }}
+      >
+        Save profiles
       </Button>
     </>
   );

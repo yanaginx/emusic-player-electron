@@ -111,11 +111,6 @@ ipcMain.on("pickMusic", async (event, folder) => {
   event.returnValue = output;
 });
 
-//example to display notification
-ipcMain.on("notify", (_, message) => {
-  new Notification({ title: "Notification", body: message }).show();
-});
-
 function createWindow() {
   // Create the main Electron window
   const win = new BrowserWindow({
