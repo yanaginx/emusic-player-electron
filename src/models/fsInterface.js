@@ -4,6 +4,7 @@ export class FileSystemInterface {
       duration: 0,
       currentTime: 0,
       playing: false,
+      volume: 1.0,
     };
   }
 
@@ -23,6 +24,10 @@ export class FileSystemInterface {
 
     this.audio.ondurationchange = () => {
       this.info.duration = this.audio.duration;
+    };
+
+    this.audio.onvolumechange = () => {
+      this.info.volume = this.audio.volume;
     };
 
     this.audio.onpause = () => {
@@ -49,6 +54,7 @@ export class FileSystemInterface {
     this.audio.src = location;
     this.audio.pause();
     this.audio.load();
+    this.playing = true;
     this.audio.play();
   }
 
@@ -66,6 +72,10 @@ export class FileSystemInterface {
     } else {
       this.audio.pause();
     }
+  }
+
+  setVolume(volume) {
+    this.audio.volume = volume;
   }
 
   seek(time) {

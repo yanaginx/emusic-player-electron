@@ -70,7 +70,8 @@ async function parseFile(file, scanDir) {
     return output;
   } else {
     let ext = path.extname(file);
-    if (ext != ".mp3" && ext != ".ogg" && ext != ".wav") return;
+    if (ext != ".mp3" && ext != ".ogg" && ext != ".wav" && ext != ".flac")
+      return;
 
     let out = {
       date: stat.ctimeMs,
@@ -79,7 +80,7 @@ async function parseFile(file, scanDir) {
       name: path.basename(file).split(".").slice(0, -1).join("."),
     };
 
-    if (ext == ".mp3") {
+    if (ext == ".mp3" || ext == ".flac" || ext == ".ogg" || ext == ".wav") {
       out.tags = await mm.parseFile(file, { native: true });
     }
 
@@ -91,7 +92,10 @@ ipcMain.on("pickMusic", async (event, folder) => {
   let files = dialog.showOpenDialogSync({
     title: "Add music",
     filters: [
-      { name: "Sound (.mp3, .wav, .ogg)", extensions: ["mp3", "wav", "ogg"] },
+      {
+        name: "Sound (.mp3, .wav, .ogg)",
+        extensions: ["mp3", "wav", "ogg", "flac"],
+      },
     ],
     properties: ["multiSelections", folder ? "openDirectory" : "openFile"],
   });
@@ -120,6 +124,7 @@ function createWindow() {
       nodeIntegration: false,
       worldSafeExecuteJavaScript: true,
       contextIsolation: true,
+      webSecurity: false,
       preload: path.join(__dirname, "preload.js"),
     },
   });

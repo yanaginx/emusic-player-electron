@@ -16,11 +16,6 @@ export class Profile {
     this.player = player;
   }
 
-  logRandom() {
-    var a = 1;
-    // console.log("🚀 ~ file: profile.js ~ line 21 ~ Profile ~ logRandom ~ a", a);
-  }
-
   /**
    * Called by player to update the sections property when data.songs/data.playlists update
    */
@@ -83,10 +78,10 @@ export class Profile {
    */
   next() {
     if (this.data.queue.length > this.data.currentIndex + 1) {
-      this.player.interface.play(
-        this.data.queue[++this.data.currentIndex].location
-      );
-      this.player.setPlaying(this.data.queue[this.data.currentIndex]);
+      // this.player.interface.play(
+      //   this.data.queue[++this.data.currentIndex].location
+      // );
+      this.player.setPlaying(this.data.queue[++this.data.currentIndex]);
     }
   }
 
@@ -95,10 +90,10 @@ export class Profile {
    */
   previous() {
     if (this.data.currentIndex - 1 >= 0) {
-      this.player.interface.play(
-        this.data.queue[--this.data.currentIndex].location
-      );
-      this.player.setPlaying(this.data.queue[this.data.currentIndex]);
+      // this.player.interface.play(
+      //   this.data.queue[--this.data.currentIndex].location
+      // );
+      this.player.setPlaying(this.data.queue[--this.data.currentIndex]);
     }
   }
 
@@ -125,7 +120,7 @@ export class Profile {
       if (check.id == item.id) {
         this.data.currentIndex = i;
         this.player.setPlaying(check);
-        this.player.interface.play(check.location);
+        // this.player.interface.play(check.location);
 
         return;
       }
@@ -140,7 +135,7 @@ export class Profile {
     this.data.currentIndex = 0;
     this.player.setPlaying(item);
     this.player.setCurrentList(null);
-    this.player.interface.play(item.location);
+    // this.player.interface.play(item.location);
   }
 
   /**
@@ -180,6 +175,9 @@ export class Profile {
       location: file.location,
       name: file.name,
       extension: file.extension,
+      year: "Unknown",
+      album: "Unknown",
+      author: "Unknown",
     };
 
     if (file.tags) {

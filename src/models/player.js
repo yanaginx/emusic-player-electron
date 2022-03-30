@@ -79,10 +79,7 @@ export class Player {
       "🚀 ~ file: player.js ~ line 78 ~ Player ~ saveProfiles ~ this.profiles",
       this.profiles
     );
-    this.writeFile(
-      "./profiles.json",
-      JSON.stringify(Object.keys(this.profiles))
-    );
+    this.writeFile("profiles.json", JSON.stringify(Object.keys(this.profiles)));
 
     for (let name in this.profiles) {
       let profile = this.profiles[name];
@@ -109,13 +106,21 @@ export class Player {
   loadProfiles() {
     this.initializeData();
 
-    let profiles = this.readFile("./profiles.json");
+    let profiles = this.readFile("profiles.json");
 
     if (profiles) {
       profiles = JSON.parse(profiles);
+      // console.log(
+      //   "🚀 ~ file: player.js ~ line 116 ~ Player ~ loadProfiles ~ profiles",
+      //   profiles
+      // );
 
       for (let name of profiles) {
         let profile = this.readFile(name + ".json");
+        // console.log(
+        //   "🚀 ~ file: player.js ~ line 123 ~ Player ~ loadProfiles ~ profile",
+        //   profile
+        // );
 
         if (profile) {
           this.profiles[name] = JSON.parse(profile);
