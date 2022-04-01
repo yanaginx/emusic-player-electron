@@ -4,12 +4,6 @@ import dataUrl from "dataurl";
 import mimeTypes from "mime-types";
 import { app, BrowserWindow, dialog, ipcMain } from "electron";
 import path from "path";
-// const fs = require("fs");
-// const path = require("path");
-// const mm = require("music-metadata");
-// const dataUrl = require("dataurl");
-// const mimeTypes = require("mime-types");
-// const { app, BrowserWindow, dialog, ipcMain } = require("electron");
 
 const IS_DEV = process.env.IS_IN_DEVELOPMENT || false;
 

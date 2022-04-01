@@ -102,20 +102,20 @@ function MusicPlayer({ player }) {
   // };
 
   // DEBUG
-  useEffect(() => {
-    console.log(
-      "🚀 ~ file: MusicPlayer.jsx ~ line 64 ~ useEffect ~ player",
-      player
-    );
-    console.log(
-      "🚀 ~ file: MusicPlayer.jsx ~ line 68 ~ useEffect ~ player.interface",
-      player.interface.info.duration
-    );
-    console.log(
-      "🚀 ~ file: MusicPlayer.jsx ~ line 7 ~ MusicPlayer ~ track",
-      track
-    );
-  }, [track]);
+  // useEffect(() => {
+  //   console.log(
+  //     "🚀 ~ file: MusicPlayer.jsx ~ line 64 ~ useEffect ~ player",
+  //     player
+  //   );
+  //   console.log(
+  //     "🚀 ~ file: MusicPlayer.jsx ~ line 68 ~ useEffect ~ player.interface",
+  //     player.interface.info.duration
+  //   );
+  //   console.log(
+  //     "🚀 ~ file: MusicPlayer.jsx ~ line 7 ~ MusicPlayer ~ track",
+  //     track
+  //   );
+  // }, [track]);
   // END : DEBUG
 
   // useEffect(() => {

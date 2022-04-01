@@ -75,10 +75,6 @@ export class Player {
   }
 
   saveProfiles() {
-    console.log(
-      "🚀 ~ file: player.js ~ line 78 ~ Player ~ saveProfiles ~ this.profiles",
-      this.profiles
-    );
     this.writeFile("profiles.json", JSON.stringify(Object.keys(this.profiles)));
 
     for (let name in this.profiles) {
@@ -90,14 +86,6 @@ export class Player {
 
   initializeData() {
     if (this.dataInitialized) return;
-    // console.log(
-    //   "🚀 ~ file: player.js ~ line 90 ~ Player ~ initializeData ~ profile data",
-    //   this.profile.data
-    // );
-    // console.log(
-    //   "🚀 ~ file: player.js ~ line 94 ~ Player ~ initializeData ~ this",
-    //   this
-    // );
     this.profile.initialize(this);
     this.interface.initialize(this);
     this.dataInitialized = true;
@@ -110,17 +98,9 @@ export class Player {
 
     if (profiles) {
       profiles = JSON.parse(profiles);
-      // console.log(
-      //   "🚀 ~ file: player.js ~ line 116 ~ Player ~ loadProfiles ~ profiles",
-      //   profiles
-      // );
 
       for (let name of profiles) {
         let profile = this.readFile(name + ".json");
-        // console.log(
-        //   "🚀 ~ file: player.js ~ line 123 ~ Player ~ loadProfiles ~ profile",
-        //   profile
-        // );
 
         if (profile) {
           this.profiles[name] = JSON.parse(profile);

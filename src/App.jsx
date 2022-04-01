@@ -1,6 +1,6 @@
 // import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { Container, Box, Typography, Paper } from "@mui/material";
@@ -10,6 +10,11 @@ import "react-toastify/dist/ReactToastify.css";
 import { Player } from "./models/player.js";
 import { FileSystemInterface } from "./models/fsInterface.js";
 import { Profile } from "./models/profile.js";
+import { ePlayer } from "./models/ePlayer.js";
+
+import { EPlayerContext } from "./contexts/EPlayerContext";
+
+import useConstructor from "./use.constructor";
 
 // Import components
 import MusicPlayer from "./components/MusicPlayer";
@@ -20,8 +25,13 @@ import Sidebar from "./components/Sidebar";
 import Dashboard from "./pages/Dashboard";
 import Fer from "./pages/Fer";
 import Songs from "./pages/Songs";
+import Playlists from "./pages/Playlists";
+import PlaylistSongs from "./pages/PlaylistSongs";
 
 const drawerWidth = 240;
+const playerHeight = 200;
+
+let player = null;
 
 function App() {
   console.log(
@@ -40,16 +50,25 @@ function App() {
   //   player.current.loadProfiles();
   //   player.current.initialize();
   // }, []);
-  const profile = new Profile();
-  const fsInterface = new FileSystemInterface();
-  const newPlayer = new Player(fsInterface, profile);
-  const [player, setPlayer] = useState(newPlayer);
 
-  useEffect(() => {
-    newPlayer.loadProfiles();
-    newPlayer.initialize();
-    setPlayer(newPlayer);
-  }, []);
+  // const [player, setPlayer] = useState(newPlayer);
+
+  // useConstructor(() => {
+  //   player = new ePlayer();
+  //   // player.initialize();
+  //   console.log(
+  //     "This only happens ONCE and it happens BEFORE the initial render."
+  //   );
+  // });
+
+  useConstructor(() => {
+    player = useContext(EPlayerContext);
+    // player = new ePlayer();
+
+    console.log(
+      "This only happens ONCE and it happens BEFORE the initial render."
+    );
+  });
 
   return (
     <>
@@ -61,14 +80,15 @@ function App() {
               sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
               aria-label="mailbox folders"
             >
-              <Sidebar />
+              <Sidebar player={player} />
             </Box>
             <Box
               component="main"
               sx={{
                 flexGrow: 1,
                 p: 3,
-                width: { sm: `calc(100% - ${drawerWidth}px)` },
+                width: { lg: `calc(100% - ${drawerWidth}px)` },
+                height: { lg: `calc(100% - ${playerHeight}px)` },
               }}
             >
               <Routes>
@@ -83,6 +103,14 @@ function App() {
                   // element={<Songs player={player.current} />}
                   element={<Songs player={player} />}
                 />
+                <Route
+                  path="/all-playlists"
+                  element={<Playlists player={player} />}
+                />
+                <Route
+                  path="/playlist/:playlistId"
+                  element={<PlaylistSongs player={player} />}
+                />
               </Routes>
             </Box>
             <Box>
@@ -93,6 +121,7 @@ function App() {
                   left: 0,
                   right: 0,
                   zIndex: 1400,
+                  height: { playerHeight },
                 }}
                 elevation={3}
               >
