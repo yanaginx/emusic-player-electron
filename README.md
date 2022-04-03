@@ -34,7 +34,7 @@ Functionality implemented:
 - Add song to all songs list by folder or by file (support .flac, .mp3, .wav and .ogg)
 - Playlist creation
 - Play single song or whole playlist (the playback is still simple - with no repeat/shuffle mode implemented)
-- Emotion recognition (the emotion recognition server must be started before the app for this function to work)
+- Emotion recognition. The emotion recognition server - [emusic-player-electron-server](https://github.com/yanaginx/emusic-player-electron-server) must be started before the app for this function to work.
 - Save current profile (for saving the added songs and created playlists).
 
 TODO:
