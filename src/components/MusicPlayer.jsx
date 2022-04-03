@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { styled, useTheme } from "@mui/material/styles";
+import { setTrack, reset } from "../features/track/trackSlice";
 
 import { FaFastBackward, FaFastForward, FaPlay, FaPause } from "react-icons/fa";
 import {
@@ -59,6 +60,7 @@ function MusicPlayer({ player }) {
   const [name, setName] = useState(player.playing?.name);
   const [artist, setArtist] = useState(player.playing?.author);
   const { track } = useSelector((state) => state.trackRedux);
+  const dispatch = useDispatch();
 
   // references
   const audioPlayer = useRef(); // references to the audio components
@@ -73,9 +75,17 @@ function MusicPlayer({ player }) {
 
   const onEnded = (e) => {
     if (audioPlayer.current) {
-      setPosition(0);
-      setIsPlaying(false);
-      audioPlayer.current.pause();
+      if (
+        player.queue.length > 0 &&
+        player.currentIndex < player.queue.length
+      ) {
+        player.next();
+        dispatch(setTrack(player.playing));
+      } else {
+        setPosition(0);
+        setIsPlaying(false);
+        audioPlayer.current.pause();
+      }
     }
   };
 
@@ -164,6 +174,16 @@ function MusicPlayer({ player }) {
     audioPlayer.current.currentTime = value;
   };
 
+  const onNext = () => {
+    player.next();
+    dispatch(setTrack(player.playing));
+  };
+
+  const onPrevious = () => {
+    player.previous();
+    dispatch(setTrack(player.playing));
+  };
+
   const formatDuration = (value) => {
     if (value < 0) return null;
     const minute = Math.floor(value / 60);
@@ -199,13 +219,13 @@ function MusicPlayer({ player }) {
           </Box>
           {/* controllers */}
           <Stack direction="row" alignItems="center">
-            <IconButton size="large" onClick={() => {}}>
+            <IconButton size="large" onClick={onPrevious}>
               <FaFastBackward size={24} />
             </IconButton>
             <IconButton size="large" onClick={togglePlayPause}>
               {isPlaying ? <FaPause size={32} /> : <FaPlay size={32} />}
             </IconButton>
-            <IconButton size="large" onClick={() => {}}>
+            <IconButton size="large" onClick={onNext}>
               <FaFastForward size={24} />
             </IconButton>
           </Stack>

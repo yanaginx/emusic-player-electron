@@ -2,10 +2,14 @@ import { Button, Toolbar, IconButton, Box } from "@mui/material";
 import { MdHome } from "react-icons/md";
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { setTrack, reset } from "../features/track/trackSlice";
+import { MdPlayCircle } from "react-icons/md";
 
 import PlaylistSongItem from "../components/PlaylistSongItem";
 
 function PlaylistSongs({ player }) {
+  const dispatch = useDispatch();
   const { playlistId } = useParams();
   const [playlist, setPlaylist] = useState(null);
   const [allSongs, setAllSongs] = useState([]);
@@ -37,6 +41,11 @@ function PlaylistSongs({ player }) {
     setAllSongs(allSongs.filter((item) => item.id !== data.id));
   };
 
+  const playPlaylist = () => {
+    player.loadList(playlist);
+    dispatch(setTrack(player.playing));
+  };
+
   return (
     <>
       <Toolbar>
@@ -51,6 +60,14 @@ function PlaylistSongs({ player }) {
             <MdHome />
           </IconButton>
         </Link>
+        <IconButton
+          size="large"
+          edge="start"
+          aria-label="menu"
+          onClick={playPlaylist}
+        >
+          <MdPlayCircle size="50" />
+        </IconButton>
       </Toolbar>
       <Box>
         {playlist?.content.map((songData) => (

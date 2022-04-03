@@ -130,6 +130,7 @@ export class ePlayer {
     }
 
     this.currentIndex = 0;
+    this.setPlaying(this.queue[this.currentIndex]);
   }
 
   /**

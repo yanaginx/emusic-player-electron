@@ -8,8 +8,11 @@
     "build": "vite build",
     "preview": "vite preview",
     "esbuild-cjs": "esbuild electron.js --format=cjs --outfile=./public/electron.js",
+    "electron:serve": "concurrently -k \"yarn dev\" \"yarn electron:dev-wait\"",
+    "electron:dev-wait": "wait-on tcp:3000 && (npm run esbuild-cjs && cross-env IS_IN_DEVELOPMENT=true electron .)",
     "electron:dev": "npm run esbuild-cjs && cross-env IS_IN_DEVELOPMENT=true electron .",
-    "electron:build": "npm run esbuild-cjs && electron-packager --out=release --platform=linux --arch=arm64 ."
+    "electron:build-linux": "npm run esbuild-cjs && electron-packager --out=release --platform=linux --arch=arm64 .",
+    "electron:build": "npm run esbuild-cjs && electron-packager --out=release ."
   },
   "dependencies": {
     "@emotion/react": "^11.8.2",
@@ -37,8 +40,10 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^1.0.7",
+    "concurrently": "^7.1.0",
     "electron": "^17.2.0",
     "electron-packager": "^15.4.0",
-    "vite": "^2.8.0"
+    "vite": "^2.8.0",
+    "wait-on": "^6.0.1"
   }
 }
