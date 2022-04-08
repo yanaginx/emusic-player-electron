@@ -8,6 +8,7 @@ import {
   IconButton,
   Menu,
   MenuItem,
+  ListItem,
 } from "@mui/material";
 import { useState } from "react";
 import { setTrack, reset } from "../features/track/trackSlice";
@@ -51,34 +52,36 @@ function PlaylistSongItem({ player, data, deleteTrack }) {
 
   return (
     <>
-      <Card sx={{ m: 2 }}>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <CardActionArea onClick={setCurrentTrack}>
-            <CardContent>
-              <Typography variant="h5">{data.name}</Typography>
-              <Typography variant="h6" color="text.secondary">
-                {data.author}
-              </Typography>
-            </CardContent>
-          </CardActionArea>
-          <IconButton onClick={removeTrack}>
-            <MdRemove size={32} />
-          </IconButton>
-          <IconButton {...bindTrigger(popupState)}>
-            <MdMenu size={32} />
-          </IconButton>
-          {/* Menu of the popupstate */}
-          <Menu {...bindMenu(popupState)}>
-            <MenuItem onClick={removeTrack}>Remove from songs list</MenuItem>
-          </Menu>
-        </Box>
-      </Card>
+      {/* <Card sx={{ m: 2 }}> */}
+      {/* <Box */}
+      <ListItem
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <CardActionArea onClick={setCurrentTrack}>
+          <CardContent>
+            <Typography variant="h5">{data.name}</Typography>
+            <Typography variant="h6" color="text.secondary">
+              {data.author}
+            </Typography>
+          </CardContent>
+        </CardActionArea>
+        <IconButton onClick={removeTrack}>
+          <MdRemove size={32} />
+        </IconButton>
+        <IconButton {...bindTrigger(popupState)}>
+          <MdMenu size={32} />
+        </IconButton>
+        {/* Menu of the popupstate */}
+        <Menu {...bindMenu(popupState)}>
+          <MenuItem onClick={removeTrack}>Remove from songs list</MenuItem>
+        </Menu>
+      </ListItem>
+      {/* </Box> */}
+      {/* </Card> */}
     </>
   );
 }

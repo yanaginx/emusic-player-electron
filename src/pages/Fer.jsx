@@ -27,8 +27,9 @@ function Fer({ auth }) {
   useEffect(() => {
     if (isError) {
       toast.error(message);
+    } else {
+      dispatch(getEmotions());
     }
-    dispatch(getEmotions());
 
     return () => dispatch(reset());
   }, [message, isError, dispatch]);
@@ -57,9 +58,23 @@ function Fer({ auth }) {
   if (isLoading) {
     return (
       <>
-        <Box>
+        <Box
+          sx={{
+            zIndex: 5000,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            position: "fixed",
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0,
+          }}
+        >
           <CircularProgress />
-          <Typography variant="h4">Loading...</Typography>
+          <Typography variant="h4">
+            Getting your current emotion, please wait...
+          </Typography>
         </Box>
       </>
     );

@@ -73,7 +73,7 @@ function App() {
   return (
     <>
       <Router>
-        <Container>
+        <Container sx={{ height: "100%" }}>
           <Box sx={{ display: "flex" }}>
             <Box
               component="nav"
@@ -85,10 +85,8 @@ function App() {
             <Box
               component="main"
               sx={{
-                flexGrow: 1,
                 p: 3,
-                width: { lg: `calc(100% - ${drawerWidth}px)` },
-                height: { lg: `calc(100% - ${playerHeight}px)` },
+                width: "100%",
               }}
             >
               <Routes>

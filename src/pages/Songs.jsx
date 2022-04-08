@@ -2,8 +2,11 @@ import { Button, Toolbar, IconButton, Box } from "@mui/material";
 import { MdHome } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { List } from "@mui/material";
 
 import SongItem from "../components/SongItem";
+
+const playerHeight = 200;
 
 function Songs({ player }) {
   const [allSongs, setAllSongs] = useState(player.songs);
@@ -25,7 +28,7 @@ function Songs({ player }) {
 
   return (
     <>
-      <Box sx={{ height: "100%", overflowY: "auto" }}>
+      <Box>
         <Toolbar>
           <Link to="/">
             <IconButton
@@ -39,7 +42,8 @@ function Songs({ player }) {
             </IconButton>
           </Link>
         </Toolbar>
-        <Box>
+        {/* <Box sx={{ height: `100%`, overflowY: "auto" }}> */}
+        <List sx={{ height: `600px`, overflowY: "auto" }}>
           {allSongs.map((songData) => (
             <SongItem
               key={songData.id.toString()}
@@ -50,7 +54,8 @@ function Songs({ player }) {
               playlists={playlists}
             />
           ))}
-        </Box>
+        </List>
+        {/* </Box> */}
       </Box>
     </>
   );
