@@ -4,7 +4,15 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 //import components
-import { CircularProgress, Typography, Box } from "@mui/material";
+import {
+  CircularProgress,
+  Typography,
+  Box,
+  Card,
+  Button,
+  CardContent,
+  CardActions,
+} from "@mui/material";
 
 import { getEmotions, reset } from "../features/fer/ferSlice";
 
@@ -24,15 +32,16 @@ function Fer({ auth }) {
     navigate(`/create-playlist/${emotion}`);
   };
 
-  useEffect(() => {
-    if (isError) {
-      toast.error(message);
-    } else {
-      dispatch(getEmotions());
-    }
+  const reloadPage = () => {
+    dispatch(reset());
+    dispatch(getEmotions());
+    navigate("/fer");
+  };
 
+  useEffect(() => {
+    dispatch(getEmotions());
     return () => dispatch(reset());
-  }, [message, isError, dispatch]);
+  }, []);
 
   useEffect(() => {
     if (isSuccess) {
@@ -54,6 +63,34 @@ function Fer({ auth }) {
       setPrimaryEmo(primaryEmotion?.id.toLowerCase());
     }
   }, [emotions, dispatch]);
+
+  if (isError) {
+    toast.error(message);
+    return (
+      <>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Card>
+            <CardContent>
+              <Typography variant="h5" component="h2">
+                Something went wrong. Please try again.
+              </Typography>
+            </CardContent>
+            <CardActions>
+              <Button onClick={reloadPage} size="small">
+                Try again
+              </Button>
+            </CardActions>
+          </Card>
+        </Box>
+      </>
+    );
+  }
 
   if (isLoading) {
     return (
