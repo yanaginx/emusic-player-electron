@@ -9,7 +9,13 @@ export class ePlayer {
     this.queue = [];
     this.currentIndex = 0;
     this.lastId = 9;
-    this.itemMap = {};
+    this.playlistMap = {
+      Happy: null,
+      Sad: null,
+      Angry: null,
+      Surprise: null,
+      Neutral: null,
+    };
 
     this.initialize();
   }
@@ -174,6 +180,11 @@ export class ePlayer {
       }
     }
 
+    for (let i = 0; i < this.songs.length; i++) {
+      if (this.songs[i].location === song.location) {
+        return;
+      }
+    }
     this.songs.push(song);
   }
 

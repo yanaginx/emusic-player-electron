@@ -109,6 +109,8 @@ function createWindow() {
   const win = new import_electron.BrowserWindow({
     width: 800,
     height: 600,
+    autoHideMenuBar: true,
+    frame: false,
     webPreferences: {
       nodeIntegration: false,
       worldSafeExecuteJavaScript: true,
@@ -123,6 +125,7 @@ function createWindow() {
   } else {
     win.loadURL(`file://${import_path.default.join(__dirname, "..", "dist", "index.html")}`);
   }
+  win.maximize();
 }
 import_electron.app.whenReady().then(createWindow);
 import_electron.app.on("window-all-closed", () => {

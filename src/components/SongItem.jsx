@@ -16,25 +16,6 @@ import { useState } from "react";
 import { setTrack, reset } from "../features/track/trackSlice";
 import { MdRemove, MdMenu, MdPlaylistAdd } from "react-icons/md";
 import React from "react";
-import {
-  usePopupState,
-  bindTrigger,
-  bindMenu,
-} from "material-ui-popup-state/hooks";
-
-const modalStyle = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 500,
-  bgcolor: "background.paper",
-  // border: "2px solid #000",
-  boxShadow: 24,
-  pt: 2,
-  px: 4,
-  pb: 3,
-};
 
 function SongItem({ player, data, deleteTrack, addToPlaylist }) {
   const [playlists, setPlaylists] = useState(player.playlists);
@@ -46,10 +27,6 @@ function SongItem({ player, data, deleteTrack, addToPlaylist }) {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const popupState = usePopupState({
-    variant: "popover",
-    popupId: "playlistsMenu",
-  });
   // PA modal is for playlist addition
   // playlist name for playlist creation
   const [playlistId, setPlaylistId] = useState(null);

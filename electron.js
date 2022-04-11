@@ -114,6 +114,8 @@ function createWindow() {
   const win = new BrowserWindow({
     width: 800,
     height: 600,
+    autoHideMenuBar: true,
+    frame: false,
     webPreferences: {
       nodeIntegration: false,
       worldSafeExecuteJavaScript: true,
@@ -132,6 +134,8 @@ function createWindow() {
     // In all other cases, load the index.html file from the dist folder
     win.loadURL(`file://${path.join(__dirname, "..", "dist", "index.html")}`);
   }
+
+  win.maximize();
 }
 
 app.whenReady().then(createWindow);

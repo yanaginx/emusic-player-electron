@@ -2,11 +2,7 @@ import {
   Box,
   Divider,
   Drawer,
-  List,
-  ListItem,
-  ListItemText,
   Toolbar,
-  Menu,
   MenuItem,
   Typography,
   Stack,
@@ -20,7 +16,12 @@ import { useState, useEffect, useContext } from "react";
 import { useDeepCompareEffect } from "react-use";
 import { EPlayerContext } from "../contexts/EPlayerContext";
 import React from "react";
-import { MdPlaylistAdd, MdOutlineRemove } from "react-icons/md";
+import {
+  MdPlaylistAdd,
+  MdOutlineRemove,
+  MdQueueMusic,
+  MdOutlineSettings,
+} from "react-icons/md";
 
 const modalStyle = {
   position: "absolute",
@@ -81,9 +82,19 @@ function Sidebar() {
         <div>
           <Toolbar />
           <Divider />
-          <Typography sx={{ ml: 1, my: 1 }} variant="h5">
-            My music
-          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              ml: 1,
+              my: 1,
+            }}
+          >
+            <MdQueueMusic size={24} />
+            <Typography sx={{ mx: 1 }} variant="h5">
+              My Music
+            </Typography>
+          </Box>
           <Link to="/all-songs" style={{ textDecoration: "none" }}>
             <MenuItem>
               <Typography variant="h6" color="text.secondary">
@@ -131,13 +142,14 @@ function Sidebar() {
               </Box>
             </Modal>
           </Box>
-
+          {/* Playlist listing */}
           {playlists.map((playlist) => (
-            <Stack
-              key={playlist.id}
-              spacing={2}
-              direction="row"
-              alignItems="center"
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
             >
               <Link
                 to={`/playlist/${playlist.id}`}
@@ -149,11 +161,31 @@ function Sidebar() {
                   </Typography>
                 </MenuItem>
               </Link>
-              <IconButton onClick={() => removePlaylist(playlist)}>
+              <IconButton
+                sx={{ mx: 2 }}
+                onClick={() => removePlaylist(playlist)}
+              >
                 <MdOutlineRemove size={24} />
               </IconButton>
-            </Stack>
+            </Box>
           ))}
+          {/* Settings */}
+          <Link to={`/settings`} style={{ textDecoration: "none" }}>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <MenuItem sx={{ width: "100%" }}>
+                <MdOutlineSettings size={24} />
+                <Typography sx={{ mx: 1 }} variant="h5">
+                  Settings
+                </Typography>
+              </MenuItem>
+            </Box>
+          </Link>
         </div>
       </Drawer>
     </Box>

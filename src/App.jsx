@@ -27,11 +27,12 @@ import Fer from "./pages/Fer";
 import Songs from "./pages/Songs";
 import Playlists from "./pages/Playlists";
 import PlaylistSongs from "./pages/PlaylistSongs";
+import Settings from "./pages/Settings";
 
 const drawerWidth = 240;
-const playerHeight = 200;
 
 let player = null;
+let theme = null;
 
 function App() {
   console.log(
@@ -72,67 +73,69 @@ function App() {
 
   return (
     <>
-      <Router>
-        <Container sx={{ height: "100%" }}>
-          <Box sx={{ display: "flex" }}>
-            <Box
-              component="nav"
-              sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-              aria-label="mailbox folders"
-            >
-              <Sidebar player={player} />
-            </Box>
-            <Box
-              component="main"
-              sx={{
-                p: 3,
-                width: "100%",
-              }}
-            >
-              <Routes>
-                <Route
-                  path="/"
-                  // element={<Dashboard player={player.current} />}
-                  element={<Dashboard player={player} />}
-                />
-                <Route path="/fer" element={<Fer />} />
-                <Route
-                  path="/all-songs"
-                  // element={<Songs player={player.current} />}
-                  element={<Songs player={player} />}
-                />
-                <Route
-                  path="/all-playlists"
-                  element={<Playlists player={player} />}
-                />
-                <Route
-                  path="/playlist/:playlistId"
-                  element={<PlaylistSongs player={player} />}
-                />
-              </Routes>
-            </Box>
-            <Box>
-              <Paper
-                sx={{
-                  position: "fixed",
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  zIndex: 1400,
-                  height: { playerHeight },
-                }}
-                elevation={3}
+      <>
+        <Router>
+          <Container sx={{ height: "100%" }}>
+            <Box sx={{ display: "flex" }}>
+              <Box
+                component="nav"
+                sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+                aria-label="mailbox folders"
               >
-                {/* <MusicPlayer player={player.current} /> */}
-                <MusicPlayer player={player} />
-              </Paper>
-              {/* <Navbar player={player.current} /> */}
-              <Navbar player={player} />
+                <Sidebar player={player} />
+              </Box>
+              <Box
+                component="main"
+                sx={{
+                  p: 3,
+                  width: "100%",
+                }}
+              >
+                <Routes>
+                  <Route
+                    path="/"
+                    // element={<Dashboard player={player.current} />}
+                    element={<Dashboard player={player} />}
+                  />
+                  <Route path="/fer" element={<Fer />} />
+                  <Route
+                    path="/all-songs"
+                    // element={<Songs player={player.current} />}
+                    element={<Songs player={player} />}
+                  />
+                  <Route
+                    path="/all-playlists"
+                    element={<Playlists player={player} />}
+                  />
+                  <Route
+                    path="/playlist/:playlistId"
+                    element={<PlaylistSongs player={player} />}
+                  />
+                  <Route path="/settings" element={<Settings />} />
+                </Routes>
+              </Box>
+              <Box>
+                <Paper
+                  sx={{
+                    position: "fixed",
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    zIndex: 1400,
+                  }}
+                  elevation={3}
+                >
+                  {/* <MusicPlayer player={player.current} /> */}
+                  <MusicPlayer player={player} />
+                </Paper>
+                {/* <Navbar player={player.current} /> */}
+                <Navbar player={player} />
+              </Box>
             </Box>
-          </Box>
-        </Container>
-      </Router>
-      <ToastContainer />
+          </Container>
+        </Router>
+        <ToastContainer />
+      </>
     </>
   );
 }
