@@ -36,9 +36,9 @@ Functionality implemented:
 - Play single song or whole playlist (the playback is still simple - with no repeat/shuffle mode implemented)
 - Emotion recognition. The emotion recognition server - [emusic-player-electron-server](https://github.com/yanaginx/emusic-player-electron-server) must be started before the app for this function to work.
 - Save current profile (for saving the added songs and created playlists).
+- Choose playlist for specific emotion recognized (the specified playlist is chosen by user's preference, by using setting screen).
 
 TODO:
 
-- Implement: Choose playlist for specific emotion recognized.
 - Implement: Shuffle/Repeat mode for player.
 - Implement: Proper UI.

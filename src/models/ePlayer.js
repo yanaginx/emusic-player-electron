@@ -10,11 +10,11 @@ export class ePlayer {
     this.currentIndex = 0;
     this.lastId = 9;
     this.playlistMap = {
-      Happy: null,
-      Sad: null,
-      Angry: null,
-      Surprise: null,
-      Neutral: null,
+      happy: null,
+      sad: null,
+      angry: null,
+      surprise: null,
+      neutral: null,
     };
 
     this.initialize();
@@ -191,7 +191,6 @@ export class ePlayer {
   /**
    * Deletes a playlist or song
    */
-  // Fix this
   deleteItem(item) {
     if (item.type == "playlist") {
       for (let [i, list] of this.playlists.entries())
@@ -229,7 +228,6 @@ export class ePlayer {
   /**
    * Remove track from a playlist
    */
-  // Fix this
   removeFromPlaylist(playlistId, trackData) {
     let playlist = null;
     for (let list of this.playlists)
@@ -242,6 +240,13 @@ export class ePlayer {
         for (let [i, item] of playlist.content.entries())
           if (item.id == trackData.id) playlist.content.splice(i, 1);
       }
+  }
+
+  /**
+   * Mapping mood to playlist
+   */
+  mapMood(mood, playlistId) {
+    this.playlistMap[mood] = playlistId;
   }
 
   pickMusic(folder) {
@@ -270,6 +275,7 @@ export class ePlayer {
       queue: this.queue,
       currentIndex: this.currentIndex,
       lastId: this.lastId,
+      playlistMap: this.playlistMap,
     };
     this.writeFile("profile.json", JSON.stringify(data, null, "	"));
   }
@@ -293,6 +299,7 @@ export class ePlayer {
       this.queue = profile.queue;
       this.currentIndex = profile.currentIndex;
       this.lastId = profile.lastId;
+      this.playlistMap = profile.playlistMap;
     }
   }
 }

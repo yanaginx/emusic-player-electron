@@ -97,7 +97,7 @@ function App() {
                     // element={<Dashboard player={player.current} />}
                     element={<Dashboard player={player} />}
                   />
-                  <Route path="/fer" element={<Fer />} />
+                  <Route path="/fer" element={<Fer player={player} />} />
                   <Route
                     path="/all-songs"
                     // element={<Songs player={player.current} />}
@@ -111,7 +111,10 @@ function App() {
                     path="/playlist/:playlistId"
                     element={<PlaylistSongs player={player} />}
                   />
-                  <Route path="/settings" element={<Settings />} />
+                  <Route
+                    path="/settings"
+                    element={<Settings player={player} />}
+                  />
                 </Routes>
               </Box>
               <Box>
