@@ -12,10 +12,10 @@ function Songs({ player }) {
   const [allSongs, setAllSongs] = useState(player.songs);
   const [playlists, setPlaylists] = useState(player.playlists);
 
-  console.log(
-    "🚀 ~ file: Songs.jsx ~ line 10 ~ Songs ~ player.songs",
-    player.songs
-  );
+  // console.log(
+  //   "🚀 ~ file: Songs.jsx ~ line 10 ~ Songs ~ player.songs",
+  //   player.songs
+  // );
 
   const deleteTrack = (data) => {
     player.deleteItem(data);

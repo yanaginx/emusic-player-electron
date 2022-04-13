@@ -25,7 +25,6 @@ import Sidebar from "./components/Sidebar";
 import Dashboard from "./pages/Dashboard";
 import Fer from "./pages/Fer";
 import Songs from "./pages/Songs";
-import Playlists from "./pages/Playlists";
 import PlaylistSongs from "./pages/PlaylistSongs";
 import Settings from "./pages/Settings";
 
@@ -102,10 +101,6 @@ function App() {
                     path="/all-songs"
                     // element={<Songs player={player.current} />}
                     element={<Songs player={player} />}
-                  />
-                  <Route
-                    path="/all-playlists"
-                    element={<Playlists player={player} />}
                   />
                   <Route
                     path="/playlist/:playlistId"

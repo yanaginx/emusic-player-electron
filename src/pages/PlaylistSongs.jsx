@@ -1,8 +1,16 @@
-import { Button, Toolbar, IconButton, Box, List } from "@mui/material";
+import {
+  Button,
+  Toolbar,
+  IconButton,
+  Box,
+  List,
+  Typography,
+} from "@mui/material";
 import { MdHome } from "react-icons/md";
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { setTrack, reset } from "../features/track/trackSlice";
 import { MdPlayCircle } from "react-icons/md";
 
@@ -12,6 +20,7 @@ const playerHeight = 200;
 
 function PlaylistSongs({ player }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { playlistId } = useParams();
   const [playlist, setPlaylist] = useState(null);
   const [allSongs, setAllSongs] = useState([]);
@@ -20,21 +29,24 @@ function PlaylistSongs({ player }) {
   //   allSongs
   // );
 
+  const goToLibrary = () => {
+    navigate("/all-songs");
+  };
   useEffect(() => {
     setPlaylist(player.playlists.find((playlist) => playlist.id == playlistId));
-    console.log(
-      "🚀 ~ file: PlaylistSongs.jsx ~ line 19 ~ useEffect ~ playlistId",
-      playlistId
-    );
+    // console.log(
+    //   "🚀 ~ file: PlaylistSongs.jsx ~ line 19 ~ useEffect ~ playlistId",
+    //   playlistId
+    // );
   }, [playlistId]);
 
   useEffect(() => {
     if (!playlist) return;
     setAllSongs(playlist.content);
-    console.log(
-      "🚀 ~ file: PlaylistSongs.jsx ~ line 14 ~ PlaylistSongs ~ playlist.content",
-      playlist.content
-    );
+    // console.log(
+    //   "🚀 ~ file: PlaylistSongs.jsx ~ line 14 ~ PlaylistSongs ~ playlist.content",
+    //   playlist.content
+    // );
   }, [playlist]);
 
   const deleteTrack = (data) => {
@@ -45,7 +57,16 @@ function PlaylistSongs({ player }) {
 
   const playPlaylist = () => {
     player.loadList(playlist);
+    player.setPlaying(player.queue[player.currentIndex]);
+    // console.log(
+    //   "🚀 ~ file: PlaylistSongs.jsx ~ line 49 ~ playPlaylist ~ player.queue[player.currentIndex]",
+    //   player.queue[player.currentIndex]
+    // );
     dispatch(setTrack(player.playing));
+    // console.log(
+    //   "🚀 ~ file: PlaylistSongs.jsx ~ line 54 ~ playPlaylist ~ player.playing",
+    //   player.playing
+    // );
   };
 
   return (
@@ -63,26 +84,43 @@ function PlaylistSongs({ player }) {
               <MdHome />
             </IconButton>
           </Link>
-          <IconButton
-            size="large"
-            edge="start"
-            aria-label="menu"
-            onClick={playPlaylist}
-          >
-            <MdPlayCircle size="50" />
-          </IconButton>
+          {allSongs.length > 0 ? (
+            <IconButton
+              size="large"
+              edge="start"
+              aria-label="menu"
+              onClick={playPlaylist}
+            >
+              <MdPlayCircle size="50" />
+            </IconButton>
+          ) : (
+            <></>
+          )}
         </Toolbar>
         {/* <Box sx={{ height: `600px`, overflowY: "auto" }}> */}
-        <Box sx={{ height: `600px`, overflowY: "auto" }}>
-          {playlist?.content.map((songData) => (
-            <PlaylistSongItem
-              key={songData.id}
-              data={songData}
-              player={player}
-              deleteTrack={deleteTrack}
-            />
-          ))}
-        </Box>
+        {allSongs.length === 0 ? (
+          <Box sx={{ mt: 2 }}>
+            <Typography variant="h5" color="text.secondary">
+              This playlist have no songs. Adding one by going to the library
+              and select your preferences
+            </Typography>
+            <Button variant="outlined" onClick={goToLibrary}>
+              Go to library
+            </Button>
+          </Box>
+        ) : (
+          <Box sx={{ height: `600px`, overflowY: "auto" }}>
+            {playlist?.content.map((songData) => (
+              <PlaylistSongItem
+                key={songData.id}
+                data={songData}
+                player={player}
+                playlist={playlist}
+                deleteTrack={deleteTrack}
+              />
+            ))}
+          </Box>
+        )}
         {/* </Box> */}
       </Box>
     </>

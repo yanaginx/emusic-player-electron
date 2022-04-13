@@ -44,7 +44,7 @@ function Dashboard({ player }) {
             variant="outlined"
             startIcon={<MdLibraryAdd size={32} />}
             endIcon={<MdArrowDropDown size={32} />}
-            fullWidth="true"
+            fullWidth
           >
             <Typography variant="h3">Add Songs</Typography>
           </Button>
@@ -90,7 +90,7 @@ function Dashboard({ player }) {
             }}
             variant="outlined"
             startIcon={<MdSaveAlt size={32} />}
-            fullWidth="true"
+            fullWidth
           >
             <Typography variant="h3">Save profile</Typography>
           </Button>
@@ -108,7 +108,7 @@ function Dashboard({ player }) {
             }}
             startIcon={<MdOutlineEmojiEmotions size={32} />}
             variant="outlined"
-            fullWidth="true"
+            fullWidth
           >
             <Typography variant="h3">Emotion Recognition</Typography>
           </Button>
@@ -118,7 +118,7 @@ function Dashboard({ player }) {
             }}
             startIcon={<MdSettings size={32} />}
             variant="outlined"
-            fullWidth="true"
+            fullWidth
           >
             <Typography variant="h3">Settings</Typography>
           </Button>

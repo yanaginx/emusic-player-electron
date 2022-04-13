@@ -37,8 +37,13 @@ Functionality implemented:
 - Emotion recognition. The emotion recognition server - [emusic-player-electron-server](https://github.com/yanaginx/emusic-player-electron-server) must be started before the app for this function to work.
 - Save current profile (for saving the added songs and created playlists).
 - Choose playlist for specific emotion recognized (the specified playlist is chosen by user's preference, by using setting screen).
+- Shuffle/Repeat mode for player.
+- Choose playlist's track start playing the playlist with the chosen track's position.
 
 TODO:
 
-- Implement: Shuffle/Repeat mode for player.
 - Implement: Proper UI.
+
+Current issue:
+
+- Starting same song from different playlist not making the track reload.

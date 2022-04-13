@@ -21,7 +21,7 @@ import {
   bindMenu,
 } from "material-ui-popup-state/hooks";
 
-function PlaylistSongItem({ player, data, deleteTrack }) {
+function PlaylistSongItem({ player, data, deleteTrack, playlist }) {
   const dispatch = useDispatch();
   const popupState = usePopupState({ variant: "popover", popupId: "songMenu" });
   const playlistPopupState = usePopupState({
@@ -32,8 +32,9 @@ function PlaylistSongItem({ player, data, deleteTrack }) {
   const [playlistId, setPlaylistId] = useState(null);
 
   const setCurrentTrack = () => {
+    // console.log("[DEBUG] current playlist", playlist, data);
+    player.playFromList(playlist, data);
     dispatch(setTrack(data));
-    player.play(data);
   };
 
   const removeTrack = () => {
@@ -43,10 +44,10 @@ function PlaylistSongItem({ player, data, deleteTrack }) {
 
   const addTrackToPlaylist = () => {
     playlistPopupState.close;
-    console.log(
-      "🚀 ~ file: SongItem.jsx ~ line 43 ~ addTrackToPlaylist ~ playlistId",
-      playlistId
-    );
+    // console.log(
+    //   "🚀 ~ file: SongItem.jsx ~ line 43 ~ addTrackToPlaylist ~ playlistId",
+    //   playlistId
+    // );
     addToPlaylist(playlistId, data);
   };
 

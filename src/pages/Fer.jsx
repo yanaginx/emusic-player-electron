@@ -79,10 +79,10 @@ function Fer({ player }) {
           )
         );
       });
-      console.log(
-        "[DEBUG] The primary emotion: ",
-        primaryEmotion?.id.toLowerCase()
-      );
+      // console.log(
+      //   "[DEBUG] The primary emotion: ",
+      //   primaryEmotion?.id.toLowerCase()
+      // );
       setPrimaryEmo(primaryEmotion?.id.toLowerCase());
       findMoodPlaylist(primaryEmotion?.id.toLowerCase());
     }

@@ -9,6 +9,8 @@ import {
   MdVolumeDown,
   MdVolumeMute,
   MdVolumeOff,
+  MdShuffle,
+  MdReplay,
 } from "react-icons/md";
 import {
   Stack,
@@ -53,6 +55,8 @@ const track = {
 function MusicPlayer({ player }) {
   // state
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isShuffle, setIsShuffle] = useState(player.isShuffle);
+  const [isRepeat, setIsRepeat] = useState(player.isRepeat);
   const [volume, setVolume] = useState(100);
   // const duration = 200;
   const [duration, setDuration] = useState(-1);
@@ -105,6 +109,18 @@ function MusicPlayer({ player }) {
     }
   };
 
+  const toggleShuffle = () => {
+    const prevState = isShuffle;
+    setIsShuffle(!prevState);
+    player.toggleShuffle();
+  };
+
+  const toggleRepeat = () => {
+    const prevState = isRepeat;
+    setIsRepeat(!prevState);
+    player.toggleRepeat();
+  };
+
   // const togglePlayPause = () => {
   //   return audioPlayer.current.paused
   //     ? audioPlayer.current.play()
@@ -154,10 +170,10 @@ function MusicPlayer({ player }) {
   useEffect(() => {
     if (player.playing) {
       // setIsPlaying(player.interface.info.playing);
-      console.log(
-        "🚀 ~ file: MusicPlayer.jsx ~ line 104 ~ useEffect ~ player.playing",
-        player.playing
-      );
+      // console.log(
+      //   "🚀 ~ file: MusicPlayer.jsx ~ line 104 ~ useEffect ~ player.playing",
+      //   player.playing
+      // );
       setName(player.playing.name);
       setArtist(player.playing.author);
       setIsPlaying(true);
@@ -219,6 +235,15 @@ function MusicPlayer({ player }) {
           </Box>
           {/* controllers */}
           <Stack direction="row" alignItems="center">
+            {isShuffle ? (
+              <IconButton size="small" color="primary" onClick={toggleShuffle}>
+                <MdShuffle />
+              </IconButton>
+            ) : (
+              <IconButton size="small" onClick={toggleShuffle}>
+                <MdShuffle />
+              </IconButton>
+            )}
             <IconButton size="large" onClick={onPrevious}>
               <FaFastBackward size={24} />
             </IconButton>
@@ -228,6 +253,15 @@ function MusicPlayer({ player }) {
             <IconButton size="large" onClick={onNext}>
               <FaFastForward size={24} />
             </IconButton>
+            {isRepeat ? (
+              <IconButton size="small" color="primary" onClick={toggleRepeat}>
+                <MdReplay />
+              </IconButton>
+            ) : (
+              <IconButton size="small" onClick={toggleRepeat}>
+                <MdReplay />
+              </IconButton>
+            )}
           </Stack>
           {/* progress bar */}
           <Box sx={{ width: 600 }}>

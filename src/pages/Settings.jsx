@@ -19,42 +19,42 @@ function Settings({ player }) {
 
   const handleHappyPlaylist = (event) => {
     setHappy(event.target.value);
-    console.log(
-      "🚀 ~ file: Settings.jsx ~ line 22 ~ handleHappyPlaylist ~ event.target.value",
-      event.target.value
-    );
+    // console.log(
+    //   "🚀 ~ file: Settings.jsx ~ line 22 ~ handleHappyPlaylist ~ event.target.value",
+    //   event.target.value
+    // );
     player.mapMood("happy", event.target.value);
   };
   const handleSadPlaylist = (event) => {
     setSad(event.target.value);
-    console.log(
-      "🚀 ~ file: Settings.jsx ~ line 30 ~ handleSadPlaylist ~ event.target.value",
-      event.target.value
-    );
+    // console.log(
+    //   "🚀 ~ file: Settings.jsx ~ line 30 ~ handleSadPlaylist ~ event.target.value",
+    //   event.target.value
+    // );
     player.mapMood("sad", event.target.value);
   };
   const handleAngryPlaylist = (event) => {
     setAngry(event.target.value);
-    console.log(
-      "🚀 ~ file: Settings.jsx ~ line 37 ~ handleAngryPlaylist ~ event.target.value",
-      event.target.value
-    );
+    // console.log(
+    //   "🚀 ~ file: Settings.jsx ~ line 37 ~ handleAngryPlaylist ~ event.target.value",
+    //   event.target.value
+    // );
     player.mapMood("angry", event.target.value);
   };
   const handleSurprisePlaylist = (event) => {
     setSurprise(event.target.value);
-    console.log(
-      "🚀 ~ file: Settings.jsx ~ line 44 ~ handleSurprisePlaylist ~ event.target.value",
-      event.target.value
-    );
+    // console.log(
+    //   "🚀 ~ file: Settings.jsx ~ line 44 ~ handleSurprisePlaylist ~ event.target.value",
+    //   event.target.value
+    // );
     player.mapMood("surprise", event.target.value);
   };
   const handleNeutralPlaylist = (event) => {
     setNeutral(event.target.value);
-    console.log(
-      "🚀 ~ file: Settings.jsx ~ line 51 ~ handleNeutralPlaylist ~ event.target.value",
-      event.target.value
-    );
+    // console.log(
+    //   "🚀 ~ file: Settings.jsx ~ line 51 ~ handleNeutralPlaylist ~ event.target.value",
+    //   event.target.value
+    // );
     player.mapMood("neutral", event.target.value);
   };
 

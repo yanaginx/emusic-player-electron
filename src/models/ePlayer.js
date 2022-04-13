@@ -4,11 +4,18 @@ export class ePlayer {
     this.currentList = null;
     this.selected = null;
     this.dataInitialized = null;
+
     this.songs = [];
     this.playlists = [];
+
     this.queue = [];
+    this.originalQueue = [];
     this.currentIndex = 0;
+    this.isShuffle = false;
+    this.isRepeat = false;
+
     this.lastId = 9;
+
     this.playlistMap = {
       happy: null,
       sad: null,
@@ -30,6 +37,7 @@ export class ePlayer {
   }
 
   setPlaying(item) {
+    if (!item) return;
     this.playing = item;
   }
 
@@ -74,9 +82,15 @@ export class ePlayer {
   }
 
   playFromList(list, item) {
-    if (!(this.currentList && this.currentList.id == list.id)) {
+    if (
+      !(
+        this.currentList &&
+        this.currentList.id == list.id &&
+        this.currentList.length > 0
+      )
+    ) {
       this.currentList = list;
-      this.profile.loadList(list); // Loads the list into our queue
+      this.loadList(list); // Loads the list into our queue
     }
 
     this.playFromQueue(item); // Moves to this item
@@ -103,11 +117,19 @@ export class ePlayer {
    * Called by MaterialPlayer.Interface after a track is complete or the user skips
    */
   next() {
-    if (this.queue.length > this.currentIndex + 1) {
-      // this.player.interface.play(
-      //   this.data.queue[++this.data.currentIndex].location
-      // );
-      this.setPlaying(this.queue[++this.currentIndex]);
+    if (!this.isRepeat) {
+      if (this.queue.length > this.currentIndex + 1) {
+        // this.player.interface.play(
+        //   this.data.queue[++this.data.currentIndex].location
+        // );
+        this.setPlaying(this.queue[++this.currentIndex]);
+      }
+    } else {
+      if (this.isShuffle) {
+        this.shuffle();
+      }
+      this.currentIndex = ++this.currentIndex % this.queue.length;
+      this.setPlaying(this.queue[this.currentIndex]);
     }
   }
 
@@ -115,11 +137,17 @@ export class ePlayer {
    * Called when a user clicks previous
    */
   previous() {
-    if (this.currentIndex - 1 >= 0) {
-      // this.player.interface.play(
-      //   this.data.queue[--this.data.currentIndex].location
-      // );
-      this.setPlaying(this.queue[--this.currentIndex]);
+    if (!this.isRepeat) {
+      if (this.currentIndex - 1 >= 0) {
+        this.setPlaying(this.queue[--this.currentIndex]);
+      }
+    } else {
+      if (this.isShuffle) {
+        this.shuffle();
+      }
+      if (--this.currentIndex === -1) this.currentIndex = this.queue.length - 1;
+
+      this.setPlaying(this.queue[this.currentIndex]);
     }
   }
 
@@ -127,6 +155,8 @@ export class ePlayer {
    * Clear the current queue and fill it with list
    */
   loadList(list) {
+    // Won't load playlist if playlist is empty
+    if (list.length === 0) return;
     this.setCurrentList(list);
 
     this.queue.splice(0, this.queue.length);
@@ -134,9 +164,12 @@ export class ePlayer {
     for (let item of list.content) {
       this.queue.push(item);
     }
+    if (this.isShuffle) {
+      this.shuffle(true);
+    }
 
     this.currentIndex = 0;
-    this.setPlaying(this.queue[this.currentIndex]);
+    // this.setPlaying(this.queue[this.currentIndex]);
   }
 
   /**
@@ -152,6 +185,75 @@ export class ePlayer {
         return;
       }
     }
+  }
+
+  /**
+   * Shuffles queue and sets currentIndex to 0
+   */
+  shuffle(isNewList) {
+    if (this.queue.length >= 1) {
+      if (this.originalQueue.length === 0 || isNewList) {
+        this.originalQueue = [...this.queue];
+      }
+      for (let i = this.queue.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [this.queue[i], this.queue[j]] = [this.queue[j], this.queue[i]];
+      }
+      // set current playing track and move it to the front (if exists)
+      if (this.currentList && this.playing) {
+        for (let i = 0; i < this.queue.length; i++) {
+          if (this.queue[i].id == this.playing.id) {
+            this.queue.splice(i, 1);
+            this.queue.unshift(this.playing);
+            this.currentIndex = 0;
+            break;
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * Unshuffle and reset queue
+   */
+  unshuffle() {
+    // get current song index from the original queue
+    let currIndex = 0;
+    for (let i = 0; i < this.originalQueue.length; i++) {
+      if (this.originalQueue[i].id == this.playing.id) {
+        currIndex = i;
+        break;
+      }
+    }
+    if (this.originalQueue.length > 0) {
+      this.queue = this.originalQueue;
+      this.originalQueue = [];
+      this.currentIndex = currIndex;
+    }
+  }
+
+  /**
+   * Toggle shuffling
+   */
+  toggleShuffle() {
+    this.isShuffle = !this.isShuffle;
+    if (this.currentList) {
+      if (this.isShuffle) {
+        this.shuffle();
+      } else {
+        console.log(
+          "🚀 ~ file: ePlayer.js ~ line 228 ~ ePlayer ~ toggleShuffle ~ went to unshuffle here"
+        );
+        this.unshuffle();
+      }
+    }
+  }
+
+  /**
+   * Toggle repeat
+   */
+  toggleRepeat() {
+    this.isRepeat = !this.isRepeat;
   }
 
   addFile(file) {
