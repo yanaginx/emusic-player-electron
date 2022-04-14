@@ -38,6 +38,7 @@ function SongItem({ player, data, deleteTrack, addToPlaylist }) {
 
   const setCurrentTrack = () => {
     dispatch(setTrack(data));
+    player.togglePlayingChange();
     player.play(data);
   };
 

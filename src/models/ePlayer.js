@@ -16,6 +16,9 @@ export class ePlayer {
 
     this.lastId = 9;
 
+    // indicator for playing track changed
+    this.playingChange = 0;
+
     this.playlistMap = {
       happy: null,
       sad: null,
@@ -254,6 +257,13 @@ export class ePlayer {
    */
   toggleRepeat() {
     this.isRepeat = !this.isRepeat;
+  }
+
+  /**
+   * Toggle playing track change
+   */
+  togglePlayingChange() {
+    this.playingChange = !this.playingChange;
   }
 
   addFile(file) {

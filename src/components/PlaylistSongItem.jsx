@@ -33,8 +33,9 @@ function PlaylistSongItem({ player, data, deleteTrack, playlist }) {
 
   const setCurrentTrack = () => {
     // console.log("[DEBUG] current playlist", playlist, data);
-    player.playFromList(playlist, data);
     dispatch(setTrack(data));
+    player.togglePlayingChange();
+    player.playFromList(playlist, data);
   };
 
   const removeTrack = () => {

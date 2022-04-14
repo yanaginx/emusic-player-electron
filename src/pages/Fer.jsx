@@ -44,6 +44,8 @@ function Fer({ player }) {
   // function for loading playlist and play it
   const playMoodPlaylist = () => {
     player.loadList(moodPlaylist);
+    player.setPlaying(player.queue[player.currentIndex]);
+    player.togglePlayingChange();
     dispatch(setTrack(player.playing));
   };
 

@@ -39,6 +39,7 @@ Functionality implemented:
 - Choose playlist for specific emotion recognized (the specified playlist is chosen by user's preference, by using setting screen).
 - Shuffle/Repeat mode for player.
 - Choose playlist's track start playing the playlist with the chosen track's position.
+- Partially fix issue when starting same song from different playlist not making the track reload.
 
 TODO:
 
@@ -46,4 +47,4 @@ TODO:
 
 Current issue:
 
-- Starting same song from different playlist not making the track reload.
+- TBD

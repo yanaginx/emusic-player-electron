@@ -58,6 +58,7 @@ function PlaylistSongs({ player }) {
   const playPlaylist = () => {
     player.loadList(playlist);
     player.setPlaying(player.queue[player.currentIndex]);
+    player.togglePlayingChange();
     // console.log(
     //   "🚀 ~ file: PlaylistSongs.jsx ~ line 49 ~ playPlaylist ~ player.queue[player.currentIndex]",
     //   player.queue[player.currentIndex]

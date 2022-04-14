@@ -169,7 +169,6 @@ function MusicPlayer({ player }) {
 
   useEffect(() => {
     if (player.playing) {
-      // setIsPlaying(player.interface.info.playing);
       // console.log(
       //   "🚀 ~ file: MusicPlayer.jsx ~ line 104 ~ useEffect ~ player.playing",
       //   player.playing
@@ -177,8 +176,13 @@ function MusicPlayer({ player }) {
       setName(player.playing.name);
       setArtist(player.playing.author);
       setIsPlaying(true);
+      audioPlayer.current.load();
+      console.log(
+        "🚀 ~ file: MusicPlayer.jsx ~ line 183 ~ MusicPlayer ~ player.playingChange",
+        player.playingChange
+      );
     }
-  }, [player.playing]);
+  }, [player.playing, player.playingChange]);
 
   const handleVolumeChange = (e, value) => {
     setVolume(value);
