@@ -105,6 +105,15 @@ import_electron.ipcMain.on("pickMusic", async (event, folder) => {
   }
   event.returnValue = output;
 });
+var callbackForBluetoothEvent = null;
+import_electron.ipcMain.on("channelForTerminationSignal", (_) => {
+  callbackForBluetoothEvent("");
+  console.log("Discovery cancelled");
+});
+import_electron.ipcMain.on("channelForSelectingDevice", (event, DeviceId) => {
+  callbackForBluetoothEvent(sentDeviceId);
+  console.log("Device selected, discovery finished");
+});
 function createWindow() {
   const win = new import_electron.BrowserWindow({
     width: 800,
@@ -125,6 +134,12 @@ function createWindow() {
   } else {
     win.loadURL(`file://${import_path.default.join(__dirname, "..", "dist", "index.html")}`);
   }
+  win.webContents.on("select-bluetooth-device", (event, deviceList, callback) => {
+    event.preventDefault();
+    let bluetoothDeviceList = deviceList;
+    callbackForBluetoothEvent = callback;
+    win.webContents.send("channelForBluetoothDeviceList", bluetoothDeviceList);
+  });
   win.maximize();
 }
 import_electron.app.whenReady().then(createWindow);

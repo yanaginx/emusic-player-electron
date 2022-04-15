@@ -109,6 +109,20 @@ ipcMain.on("pickMusic", async (event, folder) => {
   event.returnValue = output;
 });
 
+var callbackForBluetoothEvent = null;
+
+//cancels Discovery
+ipcMain.on("channelForTerminationSignal", (_) => {
+  callbackForBluetoothEvent(""); //reference to callback of win.webContents.on('select-bluetooth-device'...)
+  console.log("Discovery cancelled");
+});
+
+//resolves navigator.bluetooth.requestDevice() and stops device discovery
+ipcMain.on("channelForSelectingDevice", (event, DeviceId) => {
+  callbackForBluetoothEvent(sentDeviceId); //reference to callback of win.webContents.on('select-bluetooth-device'...)
+  console.log("Device selected, discovery finished");
+});
+
 function createWindow() {
   // Create the main Electron window
   const win = new BrowserWindow({
@@ -134,6 +148,22 @@ function createWindow() {
     // In all other cases, load the index.html file from the dist folder
     win.loadURL(`file://${path.join(__dirname, "..", "dist", "index.html")}`);
   }
+
+  //This sender sends the devicelist from the main process to all renderer processes
+  win.webContents.on(
+    "select-bluetooth-device",
+    (event, deviceList, callback) => {
+      event.preventDefault(); //important, otherwise first available device will be selected
+      // console.log(deviceList); //if you want to see the devices in the shell
+      let bluetoothDeviceList = deviceList;
+      callbackForBluetoothEvent = callback; //to make it accessible outside createWindow()
+
+      win.webContents.send(
+        "channelForBluetoothDeviceList",
+        bluetoothDeviceList
+      );
+    }
+  );
 
   win.maximize();
 }

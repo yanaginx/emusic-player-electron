@@ -18,4 +18,17 @@ contextBridge.exposeInMainWorld("electron", {
       ipcRenderer.removeListener("soundLoaded", callback);
     },
   },
+
+  bluetoothApi: {
+    getDevices(resultList) {
+      // console.log("Started the listener on chennelForBluetoothDeviceList");
+      ipcRenderer.on("channelForBluetoothDeviceList", (event, list) => {
+        console.log(
+          "🚀 ~ file: preload.js ~ line 28 ~ ipcRenderer.on ~ list",
+          list
+        );
+        resultList = list;
+      });
+    },
+  },
 });

@@ -44,6 +44,7 @@ Functionality implemented:
 TODO:
 
 - Implement: Proper UI.
+- Implement: Currently playing queue fullscreen
 
 Current issue:
 

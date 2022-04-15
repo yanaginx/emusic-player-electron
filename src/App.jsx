@@ -62,6 +62,7 @@ function App() {
   // });
 
   useConstructor(() => {
+    electron.bluetoothApi.getDevices();
     player = useContext(EPlayerContext);
     // player = new ePlayer();
 

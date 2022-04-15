@@ -3,13 +3,126 @@ import {
   Typography,
   Divider,
   InputLabel,
+  List,
+  ListItem,
   MenuItem,
   FormControl,
   Select,
+  Button,
+  CircularProgress,
+  CardActionArea,
+  CardContent,
+  Modal,
+  TextField,
 } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  getNetworks,
+  connectToNetwork,
+  disconnectFromNetwork,
+  reset,
+} from "../features/wifi/wifiSlice";
+import useConstructor from "../use.constructor";
+
+const modalStyle = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 500,
+  bgcolor: "background.paper",
+  // border: "2px solid #000",
+  boxShadow: 24,
+  pt: 2,
+  px: 4,
+  pb: 3,
+};
 
 function Settings({ player }) {
+  const [devices, setDevices] = useState([]);
+  useConstructor(() => {
+    let list = [];
+    electron.bluetoothApi.getDevices(list);
+    setDevices(list);
+
+    console.log(
+      "This only happens ONCE and it happens BEFORE the initial render."
+    );
+  });
+
+  useEffect(() => {
+    console.log(
+      "🚀 ~ file: Settings.jsx ~ line 45 ~ useEffect ~ devices",
+      devices
+    );
+  }, [devices]);
+
+  const dispatch = useDispatch();
+  // Initial state for the wifi related
+  const {
+    connection,
+    allConnections,
+    isLoading,
+    isSuccess,
+    isError,
+    isLoadingConnect,
+    isSuccessConnect,
+    isErrorConnect,
+    message,
+  } = useSelector((state) => state.wifi);
+
+  useEffect(() => {
+    return () => {
+      dispatch(reset());
+    };
+  }, [dispatch]);
+
+  const [openConnectModal, setOpenConnectModal] = useState(false);
+  const [currSsid, setCurrSsid] = useState("");
+  const [currPassword, setCurrPassword] = useState("");
+  const handleConnectModalOpen = (ssid) => {
+    setOpenConnectModal(true);
+    setCurrSsid(ssid);
+  };
+  const handleConnectModalClose = () => {
+    setOpenConnectModal(false);
+  };
+
+  // For scrolling into view after get all the wifi connections
+  const wifiSetupRef = useRef(null);
+  // const executeScroll = () =>
+  //   wifiSetupRef.current.scrollIntoView({ behavior: "smooth" });
+
+  // method for setting the wifi connection
+  const onGetNetworks = () => {
+    dispatch(getNetworks());
+  };
+  const onConnectNetwork = (info) => {
+    dispatch(reset());
+    console.log("[DEBUG] info: ", info);
+    setCurrSsid("");
+    setCurrPassword("");
+    dispatch(connectToNetwork(info));
+    handleConnectModalClose();
+  };
+  const onDisconnect = () => {
+    dispatch(reset());
+    dispatch(disconnectFromNetwork());
+  };
+
+  // method for setting the bluetooth
+  const onRequestBluetooth = () => {
+    navigator.bluetooth.requestDevice({ acceptAllDevices: true });
+  };
+
+  useEffect(() => {
+    console.log("[DEBUG] current ssid: ", currSsid);
+  }, [currSsid]);
+
+  // BLOCK: Bluetooth test
+  useEffect(() => {}, []);
+
   // playlist value for 5 types of emotion
   const [happy, setHappy] = useState(player.playlistMap.happy);
   const [sad, setSad] = useState(player.playlistMap.sad);
@@ -59,7 +172,7 @@ function Settings({ player }) {
   };
 
   return (
-    <>
+    <Box sx={{ height: `80vh`, overflowY: "auto" }}>
       <Box
         display="flex"
         justifyContent="center"
@@ -70,10 +183,12 @@ function Settings({ player }) {
         <Typography variant="h3">Settings</Typography>
       </Box>
       <Divider />
+      {/* Options for mood - playlist mapping  */}
       <Box marginBottom={6} marginTop={3}>
         <Typography marginBottom={2} variant="h5">
           Emotion-based playlist option
         </Typography>
+
         {/* Happy mood playlist select */}
         <Box my={2}>
           <FormControl sx={{ width: "50%" }}>
@@ -172,7 +287,94 @@ function Settings({ player }) {
           </FormControl>
         </Box>
       </Box>
-    </>
+
+      {/* Options for wifi setup  */}
+      <Box marginBottom={6} marginTop={3}>
+        <Typography marginBottom={2} variant="h5">
+          Wifi setup
+        </Typography>
+        <Button onClick={onGetNetworks}>Get all connections</Button>
+        {isLoadingConnect ? (
+          <CircularProgress />
+        ) : (
+          <>
+            {connection ? (
+              <>
+                <Typography color="primary">{connection[0].ssid}</Typography>
+                <Button onClick={onDisconnect}>Disconnect</Button>
+              </>
+            ) : (
+              <></>
+            )}
+          </>
+        )}
+        {isLoading ? (
+          <>
+            <CircularProgress />
+          </>
+        ) : (
+          <List>
+            {allConnections.map((connection) => (
+              <ListItem>
+                <CardActionArea
+                  onClick={() => {
+                    handleConnectModalOpen(connection.ssid);
+                  }}
+                >
+                  <CardContent>
+                    <Typography gutterBottom>
+                      {connection.ssid} + {connection.quality}
+                    </Typography>
+                  </CardContent>
+                </CardActionArea>
+              </ListItem>
+            ))}
+          </List>
+        )}
+      </Box>
+      <Modal
+        open={openConnectModal}
+        onClose={handleConnectModalClose}
+        aria-labelledby="parent-modal-title"
+        aria-describedby="parent-modal-description"
+      >
+        <Box sx={{ ...modalStyle }}>
+          <Typography sx={{ my: 1 }} variant="h4">
+            Connect to wifi network
+          </Typography>
+          <Typography sx={{ my: 1 }} variant="body1">
+            {currSsid}
+          </Typography>
+          <TextField
+            fullWidth
+            label="password"
+            variant="standard"
+            type="password"
+            value={currPassword}
+            onChange={(e) => setCurrPassword(e.target.value)}
+          />
+          <Button
+            onClick={() => {
+              const info = {
+                ssid: currSsid,
+                password: currPassword,
+              };
+              onConnectNetwork(info);
+            }}
+          >
+            Connect
+          </Button>
+        </Box>
+      </Modal>
+
+      {/* Option for bluetooth setup */}
+      <Box marginBottom={6} marginTop={3}>
+        <Typography marginBottom={2} variant="h5">
+          Bluetooth setup
+        </Typography>
+        <Button onClick={onRequestBluetooth}>Get all connections</Button>
+      </Box>
+    </Box>
   );
 }
 

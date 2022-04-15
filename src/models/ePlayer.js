@@ -20,11 +20,11 @@ export class ePlayer {
     this.playingChange = 0;
 
     this.playlistMap = {
-      happy: null,
-      sad: null,
-      angry: null,
-      surprise: null,
-      neutral: null,
+      happy: "",
+      sad: "",
+      angry: "",
+      surprise: "",
+      neutral: "",
     };
 
     this.initialize();
