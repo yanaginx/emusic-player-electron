@@ -19,7 +19,6 @@ var import_dataurl = __toESM(require("dataurl"));
 var import_mime_types = __toESM(require("mime-types"));
 var import_electron = require("electron");
 var import_path = __toESM(require("path"));
-var import_walk = __toESM(require("walk"));
 const IS_DEV = process.env.IS_IN_DEVELOPMENT || false;
 function readSound(location) {
   const pm = new Promise((resolve, reject) => {
@@ -94,7 +93,6 @@ import_electron.ipcMain.on("pickMusic", async (event, folder) => {
     ],
     properties: ["multiSelections", folder ? "openDirectory" : "openFile"]
   });
-  console.log("\u{1F680} ~ file: electron.js ~ line 96 ~ ipcMain.on ~ files", files);
   if (!files) {
     event.returnValue = [];
     return null;
@@ -127,17 +125,6 @@ async function parseMusic(allFiles) {
   }
   return result;
 }
-function walkSync(currentDirPath, callback) {
-  import_fs.default.readdirSync(currentDirPath).forEach(function(name) {
-    var filePath = import_path.default.join(currentDirPath, name);
-    var stat = import_fs.default.statSync(filePath);
-    if (stat.isFile()) {
-      callback(filePath, stat);
-    } else if (stat.isDirectory()) {
-      walkSync(filePath, callback);
-    }
-  });
-}
 function getFiles(dir) {
   return import_fs.default.readdirSync(dir).flatMap((item) => {
     const filePath = import_path.default.join(dir, item);
@@ -147,12 +134,8 @@ function getFiles(dir) {
     return filePath;
   });
 }
-function printFilePath(filePath, stat) {
-  console.log("\u{1F680} ~ file: electron.js ~ line 195 ~ printFilePath ~ filePath, stat", filePath, stat);
-}
 import_electron.ipcMain.on("scanMusicDir", async (event, directoryPath) => {
   let files = directoryPath;
-  console.log("\u{1F680} ~ file: electron.js ~ line 126 ~ ipcMain.on ~ files", files);
   if (!files) {
     event.returnValue = [];
     return null;
@@ -160,8 +143,6 @@ import_electron.ipcMain.on("scanMusicDir", async (event, directoryPath) => {
   let allFiles = [];
   allFiles = getFiles(directoryPath);
   let output = await parseMusic(allFiles);
-  console.log("\u{1F680} ~ file: electron.js ~ line 194 ~ ipcMain.on ~ output", output);
-  console.log("\u{1F680} ~ file: electron.js ~ line 173 ~ ipcMain.on ~ allFiles", allFiles);
   event.returnValue = output;
 });
 var callbackForBluetoothEvent = null;

@@ -4,7 +4,6 @@ import dataUrl from "dataurl";
 import mimeTypes from "mime-types";
 import { app, BrowserWindow, dialog, ipcMain } from "electron";
 import path from "path";
-import walk from "walk";
 
 const IS_DEV = process.env.IS_IN_DEVELOPMENT || false;
 
@@ -105,7 +104,7 @@ ipcMain.on("pickMusic", async (event, folder) => {
     ],
     properties: ["multiSelections", folder ? "openDirectory" : "openFile"],
   });
-  console.log("🚀 ~ file: electron.js ~ line 96 ~ ipcMain.on ~ files", files);
+  // console.log("🚀 ~ file: electron.js ~ line 96 ~ ipcMain.on ~ files", files);
 
   if (!files) {
     event.returnValue = [];
@@ -160,7 +159,6 @@ function getFiles(dir) {
 
 ipcMain.on("scanMusicDir", async (event, directoryPath) => {
   let files = directoryPath;
-  console.log("🚀 ~ file: electron.js ~ line 126 ~ ipcMain.on ~ files", files);
 
   if (!files) {
     event.returnValue = [];
@@ -172,32 +170,6 @@ ipcMain.on("scanMusicDir", async (event, directoryPath) => {
   allFiles = getFiles(directoryPath);
 
   let output = await parseMusic(allFiles);
-  console.log(
-    "🚀 ~ file: electron.js ~ line 194 ~ ipcMain.on ~ output",
-    output
-  );
-
-  console.log(
-    "🚀 ~ file: electron.js ~ line 173 ~ ipcMain.on ~ allFiles",
-    allFiles
-  );
-
-  // let ext = path.extname(file);
-  // if (ext != ".mp3" && ext != ".ogg" && ext != ".wav" && ext != ".flac")
-  //   return;
-
-  // let out = {
-  //   date: stat.ctimeMs,
-  //   extension: ext,
-  //   location: file,
-  //   name: path.basename(file).split(".").slice(0, -1).join("."),
-  // };
-
-  // if (ext == ".mp3" || ext == ".flac" || ext == ".ogg" || ext == ".wav") {
-  //   out.tags = await mm.parseFile(file, { native: true });
-  // }
-
-  // return [out];
 
   event.returnValue = output;
 });

@@ -36,8 +36,7 @@
     "react-router-dom": "^6.2.2",
     "react-toastify": "^8.2.0",
     "react-use": "^17.3.2",
-    "sync": "^0.2.5",
-    "walk": "^2.3.15"
+    "sync": "^0.2.5"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^1.0.7",
