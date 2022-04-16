@@ -4,6 +4,7 @@ import dataUrl from "dataurl";
 import mimeTypes from "mime-types";
 import { app, BrowserWindow, dialog, ipcMain } from "electron";
 import path from "path";
+import walk from "walk";
 
 const IS_DEV = process.env.IS_IN_DEVELOPMENT || false;
 
@@ -61,6 +62,17 @@ async function parseFile(file, scanDir) {
       if (p) output.push(p[0]);
     }
 
+    // for (let child of files) {
+    //   let stat = fs.lstatSync(child);
+    //   if (stat.isDirectory()) {
+    //     let p = await parseFile(path.join(file, child), true);
+    //     if (p) output.push(p[0]);
+    //   } else {
+    //     let p = await parseFile(path.join(file, child), false);
+    //     if (p) output.push(p[0]);
+    //   }
+    // }
+
     return output;
   } else {
     let ext = path.extname(file);
@@ -93,6 +105,7 @@ ipcMain.on("pickMusic", async (event, folder) => {
     ],
     properties: ["multiSelections", folder ? "openDirectory" : "openFile"],
   });
+  console.log("🚀 ~ file: electron.js ~ line 96 ~ ipcMain.on ~ files", files);
 
   if (!files) {
     event.returnValue = [];
@@ -105,6 +118,86 @@ ipcMain.on("pickMusic", async (event, folder) => {
     let arr = await parseFile(file, true);
     if (arr) output = output.concat(arr);
   }
+
+  event.returnValue = output;
+});
+
+async function parseMusic(allFiles) {
+  // get the contents of dir
+  var result = [];
+  for (var i = 0; i < allFiles.length; i++) {
+    let ext = path.extname(allFiles[i]);
+    let stat = fs.lstatSync(allFiles[i]);
+    if (ext != ".mp3" && ext != ".ogg" && ext != ".wav" && ext != ".flac")
+      continue;
+
+    let out = {
+      date: stat.ctimeMs,
+      extension: ext,
+      location: allFiles[i],
+      name: path.basename(allFiles[i]).split(".").slice(0, -1).join("."),
+    };
+
+    if (ext == ".mp3" || ext == ".flac" || ext == ".ogg" || ext == ".wav") {
+      out.tags = await mm.parseFile(allFiles[i], { native: true });
+    }
+
+    result.push(out);
+  }
+  return result;
+}
+
+function getFiles(dir) {
+  return fs.readdirSync(dir).flatMap((item) => {
+    const filePath = path.join(dir, item);
+    if (fs.statSync(filePath).isDirectory()) {
+      return getFiles(filePath);
+    }
+
+    return filePath;
+  });
+}
+
+ipcMain.on("scanMusicDir", async (event, directoryPath) => {
+  let files = directoryPath;
+  console.log("🚀 ~ file: electron.js ~ line 126 ~ ipcMain.on ~ files", files);
+
+  if (!files) {
+    event.returnValue = [];
+    return null;
+  }
+
+  let allFiles = [];
+
+  allFiles = getFiles(directoryPath);
+
+  let output = await parseMusic(allFiles);
+  console.log(
+    "🚀 ~ file: electron.js ~ line 194 ~ ipcMain.on ~ output",
+    output
+  );
+
+  console.log(
+    "🚀 ~ file: electron.js ~ line 173 ~ ipcMain.on ~ allFiles",
+    allFiles
+  );
+
+  // let ext = path.extname(file);
+  // if (ext != ".mp3" && ext != ".ogg" && ext != ".wav" && ext != ".flac")
+  //   return;
+
+  // let out = {
+  //   date: stat.ctimeMs,
+  //   extension: ext,
+  //   location: file,
+  //   name: path.basename(file).split(".").slice(0, -1).join("."),
+  // };
+
+  // if (ext == ".mp3" || ext == ".flac" || ext == ".ogg" || ext == ".wav") {
+  //   out.tags = await mm.parseFile(file, { native: true });
+  // }
+
+  // return [out];
 
   event.returnValue = output;
 });

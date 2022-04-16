@@ -83,6 +83,14 @@ function Dashboard({ player }) {
             >
               Add by folders...
             </MenuItem>
+            <MenuItem
+              onClick={() => {
+                player.scanMusicDir();
+                handleAddSongClose();
+              }}
+            >
+              Scan music directory...
+            </MenuItem>
           </Menu>
           <Button
             onClick={() => {

@@ -1,4 +1,6 @@
 const { ipcRenderer, contextBridge } = require("electron");
+const os = require("os");
+const path = require("path");
 
 contextBridge.exposeInMainWorld("electron", {
   playerApi: {
@@ -16,6 +18,11 @@ contextBridge.exposeInMainWorld("electron", {
     },
     removeSoundLoadedListener(callback) {
       ipcRenderer.removeListener("soundLoaded", callback);
+    },
+    scanMusicDir() {
+      if (os.platform() == "win32") {
+        return ipcRenderer.sendSync("scanMusicDir", "D:\\Flac");
+      }
     },
   },
 

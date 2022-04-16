@@ -371,6 +371,13 @@ export class ePlayer {
     // this.profile.refresh();
   }
 
+  scanMusicDir() {
+    let data = electron.playerApi.scanMusicDir();
+    for (let file of data) {
+      this.addFile(file);
+    }
+  }
+
   writeFile(name, data) {
     return electron.playerApi.writeFile(name, data);
   }

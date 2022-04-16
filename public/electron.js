@@ -19,6 +19,7 @@ var import_dataurl = __toESM(require("dataurl"));
 var import_mime_types = __toESM(require("mime-types"));
 var import_electron = require("electron");
 var import_path = __toESM(require("path"));
+var import_walk = __toESM(require("walk"));
 const IS_DEV = process.env.IS_IN_DEVELOPMENT || false;
 function readSound(location) {
   const pm = new Promise((resolve, reject) => {
@@ -93,6 +94,7 @@ import_electron.ipcMain.on("pickMusic", async (event, folder) => {
     ],
     properties: ["multiSelections", folder ? "openDirectory" : "openFile"]
   });
+  console.log("\u{1F680} ~ file: electron.js ~ line 96 ~ ipcMain.on ~ files", files);
   if (!files) {
     event.returnValue = [];
     return null;
@@ -103,6 +105,63 @@ import_electron.ipcMain.on("pickMusic", async (event, folder) => {
     if (arr)
       output = output.concat(arr);
   }
+  event.returnValue = output;
+});
+async function parseMusic(allFiles) {
+  var result = [];
+  for (var i = 0; i < allFiles.length; i++) {
+    let ext = import_path.default.extname(allFiles[i]);
+    let stat = import_fs.default.lstatSync(allFiles[i]);
+    if (ext != ".mp3" && ext != ".ogg" && ext != ".wav" && ext != ".flac")
+      continue;
+    let out = {
+      date: stat.ctimeMs,
+      extension: ext,
+      location: allFiles[i],
+      name: import_path.default.basename(allFiles[i]).split(".").slice(0, -1).join(".")
+    };
+    if (ext == ".mp3" || ext == ".flac" || ext == ".ogg" || ext == ".wav") {
+      out.tags = await import_music_metadata.default.parseFile(allFiles[i], { native: true });
+    }
+    result.push(out);
+  }
+  return result;
+}
+function walkSync(currentDirPath, callback) {
+  import_fs.default.readdirSync(currentDirPath).forEach(function(name) {
+    var filePath = import_path.default.join(currentDirPath, name);
+    var stat = import_fs.default.statSync(filePath);
+    if (stat.isFile()) {
+      callback(filePath, stat);
+    } else if (stat.isDirectory()) {
+      walkSync(filePath, callback);
+    }
+  });
+}
+function getFiles(dir) {
+  return import_fs.default.readdirSync(dir).flatMap((item) => {
+    const filePath = import_path.default.join(dir, item);
+    if (import_fs.default.statSync(filePath).isDirectory()) {
+      return getFiles(filePath);
+    }
+    return filePath;
+  });
+}
+function printFilePath(filePath, stat) {
+  console.log("\u{1F680} ~ file: electron.js ~ line 195 ~ printFilePath ~ filePath, stat", filePath, stat);
+}
+import_electron.ipcMain.on("scanMusicDir", async (event, directoryPath) => {
+  let files = directoryPath;
+  console.log("\u{1F680} ~ file: electron.js ~ line 126 ~ ipcMain.on ~ files", files);
+  if (!files) {
+    event.returnValue = [];
+    return null;
+  }
+  let allFiles = [];
+  allFiles = getFiles(directoryPath);
+  let output = await parseMusic(allFiles);
+  console.log("\u{1F680} ~ file: electron.js ~ line 194 ~ ipcMain.on ~ output", output);
+  console.log("\u{1F680} ~ file: electron.js ~ line 173 ~ ipcMain.on ~ allFiles", allFiles);
   event.returnValue = output;
 });
 var callbackForBluetoothEvent = null;
