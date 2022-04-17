@@ -32,7 +32,6 @@ export class ePlayer {
 
   initialize() {
     this.loadProfiles();
-    console.log("👌 Profile loaded. Player initialized!");
   }
 
   setCurrentList(cList) {
@@ -412,13 +411,25 @@ export class ePlayer {
     // let profiles = this.readFile("profiles.json");
     let loadProfile = this.readFile("profile.json");
     if (loadProfile) {
-      const profile = JSON.parse(loadProfile);
-      this.songs = profile.songs;
-      this.playlists = profile.playlists;
-      this.queue = profile.queue;
-      this.currentIndex = profile.currentIndex;
-      this.lastId = profile.lastId;
-      this.playlistMap = profile.playlistMap;
+      try {
+        const profile = JSON.parse(loadProfile);
+        this.songs = profile.songs;
+        this.playlists = profile.playlists;
+        this.queue = profile.queue;
+        this.currentIndex = profile.currentIndex;
+        this.lastId = profile.lastId;
+        this.playlistMap = profile.playlistMap;
+        console.log("👌 Profile loaded. Player initialized!");
+      } catch (e) {
+        console.log(
+          "🚀 ~ file: ePlayer.js ~ line 247 ~ ePlayer ~ loadProfiles ~ error",
+          e
+        );
+      }
+    } else {
+      console.log(
+        "🚀 ~ file: ePlayer.js ~ line 251 ~ ePlayer ~ loadProfiles ~ no profile found"
+      );
     }
   }
 }
