@@ -8,7 +8,8 @@ import {
   Box,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   MdLibraryAdd,
   MdSaveAlt,
@@ -16,8 +17,15 @@ import {
   MdOutlineEmojiEmotions,
   MdSettings,
 } from "react-icons/md";
+import { toast } from "react-toastify";
+
+import { scanUsbAndCopy, reset } from "../features/scanDir/scanDirSlice";
 
 function Dashboard({ player }) {
+  const dispatch = useDispatch();
+  const { isLoading, isError, message, isSuccess } = useSelector(
+    (state) => state.scanDir
+  );
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleAddSongClick = (event) => {
@@ -26,6 +34,26 @@ function Dashboard({ player }) {
   const handleAddSongClose = () => {
     setAnchorEl(null);
   };
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(message);
+    }
+    return () => {
+      dispatch(reset());
+    };
+  }, [dispatch, isError, message]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast.info("Scanning Music directory...");
+      player.scanMusicDir();
+      toast.info("Finish scanning music directory");
+    }
+    return () => {
+      dispatch(reset());
+    };
+  }, [isSuccess, dispatch]);
 
   const navigate = useNavigate();
   return (
@@ -85,7 +113,7 @@ function Dashboard({ player }) {
             </MenuItem>
             <MenuItem
               onClick={() => {
-                player.scanMusicDir();
+                dispatch(scanUsbAndCopy());
                 handleAddSongClose();
               }}
             >

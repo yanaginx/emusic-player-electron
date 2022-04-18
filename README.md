@@ -8,7 +8,7 @@ Installation:
 
 - Clone this repo and `yarn` to install the dependencies.
 - For development run:
-  - Simply run the `electron:serve`, or you can just run `yarn dev` then `yarn electron:dev`.
+  - Simply run the `yarn electron:serve`, or you can just run `yarn dev` then `yarn electron:dev`.
 - For building the app:
   - Run `yarn build` first. In the `dist` directory, change the `src` and `href`'s path of the assets from root to current directory to prevent loading error:
     Ex: from this
@@ -34,12 +34,15 @@ Functionality implemented:
 - Add song to all songs list by folder or by file (support .flac, .mp3, .wav and .ogg)
 - Playlist creation
 - Play single song or whole playlist (the playback is still simple - with no repeat/shuffle mode implemented)
-- Emotion recognition. The emotion recognition server - [emusic-player-electron-server](https://github.com/yanaginx/emusic-player-electron-server) must be started before the app for this function to work.
 - Save current profile (for saving the added songs and created playlists).
 - Choose playlist for specific emotion recognized (the specified playlist is chosen by user's preference, by using setting screen).
 - Shuffle/Repeat mode for player.
 - Choose playlist's track start playing the playlist with the chosen track's position.
 - Partially fix issue when starting same song from different playlist not making the track reload.
+- The server - [emusic-player-electron-server](https://github.com/yanaginx/emusic-player-electron-server) must be started before the app for these functions below to work:
+  - Wifi scanning.
+  - FER and playlist picking.
+  - Scan removable devices for music and copying them to "/home/music" (linux) and "D:/Music" (windows) (only window version tested).
 
 TODO:
 

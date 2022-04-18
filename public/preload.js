@@ -21,7 +21,9 @@ contextBridge.exposeInMainWorld("electron", {
     },
     scanMusicDir() {
       if (os.platform() == "win32") {
-        return ipcRenderer.sendSync("scanMusicDir", "D:\\Flac");
+        return ipcRenderer.sendSync("scanMusicDir", "D:\\Music");
+      } else if (os.platform() == "linux") {
+        return ipcRenderer.sendSync("scanMusicDir", "/home/music");
       }
     },
   },

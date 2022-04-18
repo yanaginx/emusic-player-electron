@@ -3,6 +3,7 @@ import ferReducer from "../features/fer/ferSlice";
 import trackReducer from "../features/track/trackSlice";
 import playerReducer from "../features/player/playerSlice";
 import wifiReducer from "../features/wifi/wifiSlice";
+import scanDirReducer from "../features/scanDir/scanDirSlice";
 
 export const store = configureStore({
   reducer: {
@@ -10,5 +11,6 @@ export const store = configureStore({
     trackRedux: trackReducer,
     playerRedux: playerReducer,
     wifi: wifiReducer,
+    scanDir: scanDirReducer,
   },
 });
