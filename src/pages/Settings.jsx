@@ -14,6 +14,7 @@ import {
   CardContent,
   Modal,
   TextField,
+  Switch,
 } from "@mui/material";
 import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -23,6 +24,11 @@ import {
   disconnectFromNetwork,
   reset,
 } from "../features/wifi/wifiSlice";
+import {
+  enable,
+  disable,
+  resetHand,
+} from "../features/handGesture/handGestureSlice";
 import useConstructor from "../use.constructor";
 
 const modalStyle = {
@@ -41,6 +47,7 @@ const modalStyle = {
 
 function Settings({ player }) {
   const [devices, setDevices] = useState([]);
+
   useConstructor(() => {
     let list = [];
     electron.bluetoothApi.getDevices(list);
@@ -77,6 +84,10 @@ function Settings({ player }) {
       dispatch(reset());
     };
   }, [dispatch]);
+
+  // Initial state for the hand gesture related
+  const { isOn, isHandLoading, isHandError, handMessage, isHandSuccess } =
+    useSelector((state) => state.handGesture);
 
   const [openConnectModal, setOpenConnectModal] = useState(false);
   const [currSsid, setCurrSsid] = useState("");
@@ -183,6 +194,28 @@ function Settings({ player }) {
         <Typography variant="h3">Settings</Typography>
       </Box>
       <Divider />
+      {/* Enable and disable hand gesture */}
+      <Box marginBottom={6} marginTop={3}>
+        <Typography variant="h5">Hand Gesture</Typography>
+        <Box>{isOn ? <Typography> Opened</Typography> : <></>}</Box>
+        {!isOn ? (
+          <Button
+            onClick={() => {
+              dispatch(enable());
+            }}
+          >
+            Enable
+          </Button>
+        ) : (
+          <Button
+            onClick={() => {
+              dispatch(disable());
+            }}
+          >
+            Disable
+          </Button>
+        )}
+      </Box>
       {/* Options for mood - playlist mapping  */}
       <Box marginBottom={6} marginTop={3}>
         <Typography marginBottom={2} variant="h5">

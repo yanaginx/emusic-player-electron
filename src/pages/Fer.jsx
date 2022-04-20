@@ -15,6 +15,11 @@ import {
 } from "@mui/material";
 
 import { getEmotions, reset } from "../features/fer/ferSlice";
+import {
+  enable,
+  disable,
+  resetHand,
+} from "../features/handGesture/handGestureSlice";
 import { setTrack } from "../features/track/trackSlice";
 
 function Fer({ player }) {
@@ -24,6 +29,11 @@ function Fer({ player }) {
   const { emotions, isLoading, isError, message, isSuccess } = useSelector(
     (state) => state.fer
   );
+
+  const { isOn, isHandLoading, isHandError, handMessage, isHandSuccess } =
+    useSelector((state) => state.handGesture);
+
+  const [isUsingHandGesture, setIsUsingHandGesture] = useState(isOn);
 
   const [isExisted, setIsExisted] = useState(false);
   const [moodPlaylist, setMoodPlaylist] = useState(null);
@@ -54,6 +64,9 @@ function Fer({ player }) {
   };
 
   const reloadPage = () => {
+    if (isOn) {
+      dispatch(disable());
+    }
     dispatch(reset());
     dispatch(getEmotions());
     navigate("/fer");
@@ -64,12 +77,24 @@ function Fer({ player }) {
   };
 
   useEffect(() => {
-    dispatch(getEmotions());
-    return () => dispatch(reset());
+    if (isOn) {
+      console.log("🚀 ~ file: Fer.jsx ~ line 64 ~ useEffect ~ isOn", isOn);
+      dispatch(disable());
+      dispatch(getEmotions());
+    } else {
+      dispatch(getEmotions());
+    }
+    return () => {
+      dispatch(reset());
+    };
   }, []);
 
   useEffect(() => {
     if (isSuccess) {
+      if (!isOn && isUsingHandGesture) {
+        dispatch(resetHand());
+        dispatch(enable());
+      }
       let primaryEmotion = emotions.find((o) => {
         return (
           o.counts ===

@@ -43,6 +43,9 @@ Functionality implemented:
   - Wifi scanning.
   - FER and playlist picking.
   - Scan removable devices for music and copying them to "/home/music" (linux) and "D:/Music" (windows) (only window version tested).
+  - Using hand gesture to control. This mode can be enabled manually on the settings menu. The app is able to script switching if user want to FER when hand gesture mode enable.
+    - Play/pause and next/previous only works properly when the app is fully open, with resolution of 1600x900
+    - Volume might not work on Linux (since the library use for controlling volume is specifically for windows).
 
 TODO:
 
