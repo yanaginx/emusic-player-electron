@@ -25,6 +25,12 @@ import {
   reset,
 } from "../features/wifi/wifiSlice";
 import {
+  getDevices,
+  connectToDevice,
+  disconnectFromDevice,
+  resetBluetooth,
+} from "../features/bluetooth/bluetoothSlice";
+import {
   enable,
   disable,
   resetHand,
@@ -48,22 +54,22 @@ const modalStyle = {
 function Settings({ player }) {
   const [devices, setDevices] = useState([]);
 
-  useConstructor(() => {
-    let list = [];
-    electron.bluetoothApi.getDevices(list);
-    setDevices(list);
+  // useConstructor(() => {
+  //   let list = [];
+  //   electron.bluetoothApi.getDevices(list);
+  //   setDevices(list);
 
-    console.log(
-      "This only happens ONCE and it happens BEFORE the initial render."
-    );
-  });
+  //   console.log(
+  //     "This only happens ONCE and it happens BEFORE the initial render."
+  //   );
+  // });
 
-  useEffect(() => {
-    console.log(
-      "🚀 ~ file: Settings.jsx ~ line 45 ~ useEffect ~ devices",
-      devices
-    );
-  }, [devices]);
+  // useEffect(() => {
+  //   console.log(
+  //     "🚀 ~ file: Settings.jsx ~ line 45 ~ useEffect ~ devices",
+  //     devices
+  //   );
+  // }, [devices]);
 
   const dispatch = useDispatch();
   // Initial state for the wifi related
@@ -79,9 +85,26 @@ function Settings({ player }) {
     message,
   } = useSelector((state) => state.wifi);
 
+  // Initial state for the bluetooth related
+  const {
+    device,
+    allDevices,
+    isErrorDevices,
+    isLoadingDevices,
+    isSuccessDevices,
+    isSuccessConnectDevice,
+    isLoadingConnectDevice,
+    isErrorConnectDevice,
+    isSuccessDisconnectDevice,
+    isLoadingDisconnectDevice,
+    isErrorDisconnectDevice,
+    bluetoothMessage,
+  } = useSelector((state) => state.bluetooth);
+
   useEffect(() => {
     return () => {
       dispatch(reset());
+      dispatch(resetBluetooth());
     };
   }, [dispatch]);
 
@@ -89,6 +112,7 @@ function Settings({ player }) {
   const { isOn, isHandLoading, isHandError, handMessage, isHandSuccess } =
     useSelector((state) => state.handGesture);
 
+  // Modal for connect to wifi
   const [openConnectModal, setOpenConnectModal] = useState(false);
   const [currSsid, setCurrSsid] = useState("");
   const [currPassword, setCurrPassword] = useState("");
@@ -99,6 +123,9 @@ function Settings({ player }) {
   const handleConnectModalClose = () => {
     setOpenConnectModal(false);
   };
+
+  // Modal for connect to bluetooth
+  const [macAddr, setMacAddr] = useState("");
 
   // For scrolling into view after get all the wifi connections
   const wifiSetupRef = useRef(null);
@@ -122,17 +149,28 @@ function Settings({ player }) {
     dispatch(disconnectFromNetwork());
   };
 
-  // method for setting the bluetooth
-  const onRequestBluetooth = () => {
-    navigator.bluetooth.requestDevice({ acceptAllDevices: true });
+  // method for setting the bluetooth connection
+  const onGetDevices = () => {
+    dispatch(getDevices());
   };
+  const onConnectDevice = (mac) => {
+    dispatch(resetBluetooth());
+    dispatch(connectToDevice(mac));
+    setMacAddr("");
+  };
+  const onDisconnectDevice = (mac) => {
+    dispatch(resetBluetooth());
+    dispatch(disconnectFromDevice(mac));
+  };
+
+  // method for setting the bluetooth
+  // const onRequestBluetooth = () => {
+  //   navigator.bluetooth.requestDevice({ acceptAllDevices: true });
+  // };
 
   useEffect(() => {
     console.log("[DEBUG] current ssid: ", currSsid);
   }, [currSsid]);
-
-  // BLOCK: Bluetooth test
-  useEffect(() => {}, []);
 
   // playlist value for 5 types of emotion
   const [happy, setHappy] = useState(player.playlistMap.happy);
@@ -405,7 +443,51 @@ function Settings({ player }) {
         <Typography marginBottom={2} variant="h5">
           Bluetooth setup
         </Typography>
-        <Button onClick={onRequestBluetooth}>Get all connections</Button>
+        <Button onClick={onGetDevices}>Get all bluetooth devices</Button>
+        {isLoadingConnectDevice ? (
+          <CircularProgress />
+        ) : (
+          <>
+            {device ? (
+              <>
+                <Typography color="primary">
+                  {device[0].name + ":" + device[0].mac}
+                </Typography>
+                <Button onClick={onDisconnectDevice}>Disconnect</Button>
+                {isLoadingDisconnectDevice ? <CircularProgress /> : <></>}
+              </>
+            ) : (
+              <></>
+            )}
+          </>
+        )}
+        {isLoadingDevices ? (
+          <>
+            <CircularProgress />
+          </>
+        ) : (
+          <List>
+            {allDevices.map((device) => (
+              <ListItem>
+                <CardActionArea
+                  onClick={() => {
+                    setMacAddr(device.mac);
+                    const info = {
+                      mac: device.mac,
+                    };
+                    onConnectDevice(info);
+                  }}
+                >
+                  <CardContent>
+                    <Typography gutterBottom>
+                      {device.mac} + {device.name}
+                    </Typography>
+                  </CardContent>
+                </CardActionArea>
+              </ListItem>
+            ))}
+          </List>
+        )}
       </Box>
     </Box>
   );
