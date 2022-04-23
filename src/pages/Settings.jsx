@@ -35,6 +35,11 @@ import {
   disable,
   resetHand,
 } from "../features/handGesture/handGestureSlice";
+import {
+  getVolume,
+  setVolume,
+  resetVolume,
+} from "../features/volume/volumeSlice";
 import useConstructor from "../use.constructor";
 
 const modalStyle = {
@@ -101,6 +106,17 @@ function Settings({ player }) {
     bluetoothMessage,
   } = useSelector((state) => state.bluetooth);
 
+  // Initial state for the volume related
+  const {
+    systemVolume,
+    isLoadingGet,
+    isSuccessGet,
+    isErrorGet,
+    isLoadingSet,
+    isSuccessSet,
+    isErrorSet,
+  } = useSelector((state) => state.volume);
+
   useEffect(() => {
     return () => {
       dispatch(reset());
@@ -162,11 +178,6 @@ function Settings({ player }) {
     dispatch(resetBluetooth());
     dispatch(disconnectFromDevice(mac));
   };
-
-  // method for setting the bluetooth
-  // const onRequestBluetooth = () => {
-  //   navigator.bluetooth.requestDevice({ acceptAllDevices: true });
-  // };
 
   useEffect(() => {
     console.log("[DEBUG] current ssid: ", currSsid);

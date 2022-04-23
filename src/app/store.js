@@ -6,6 +6,7 @@ import wifiReducer from "../features/wifi/wifiSlice";
 import scanDirReducer from "../features/scanDir/scanDirSlice";
 import handGestureReducer from "../features/handGesture/handGestureSlice";
 import bluetoothReducer from "../features/bluetooth/bluetoothSlice";
+import volumeReducer from "../features/volume/volumeSlice";
 
 export const store = configureStore({
   reducer: {
@@ -16,5 +17,6 @@ export const store = configureStore({
     scanDir: scanDirReducer,
     handGesture: handGestureReducer,
     bluetooth: bluetoothReducer,
+    volume: volumeReducer,
   },
 });

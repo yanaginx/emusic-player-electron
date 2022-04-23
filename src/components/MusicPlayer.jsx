@@ -2,6 +2,11 @@ import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { styled, useTheme } from "@mui/material/styles";
 import { setTrack, reset } from "../features/track/trackSlice";
+import {
+  getVolume,
+  setVolume,
+  resetVolume,
+} from "../features/volume/volumeSlice";
 
 import { FaFastBackward, FaFastForward, FaPlay, FaPause } from "react-icons/fa";
 import {
@@ -21,7 +26,6 @@ import {
   IconButton,
 } from "@mui/material";
 import { toast } from "react-toastify";
-import ReactAudioPlayer from "react-audio-player";
 
 const TinyText = styled(Typography)({
   fontSize: "0.75rem",
@@ -53,11 +57,23 @@ const track = {
 };
 
 function MusicPlayer({ player }) {
+  // Initial state for the volume related
+  const {
+    systemVolume,
+    isLoadingGet,
+    isSuccessGet,
+    isErrorGet,
+    isLoadingSet,
+    isSuccessSet,
+    isErrorSet,
+  } = useSelector((state) => state.volume);
+
   // state
   const [isPlaying, setIsPlaying] = useState(false);
   const [isShuffle, setIsShuffle] = useState(player.isShuffle);
   const [isRepeat, setIsRepeat] = useState(player.isRepeat);
-  const [volume, setVolume] = useState(100);
+  // const [volume, setVolume] = useState(100);
+  const [currVolume, setCurrVolume] = useState(100);
   // const duration = 200;
   const [duration, setDuration] = useState(-1);
   const [position, setPosition] = useState(-1);
@@ -68,6 +84,16 @@ function MusicPlayer({ player }) {
 
   // references
   const audioPlayer = useRef(); // references to the audio components
+
+  // fetching the audio volume from the system by 0.5 second interval
+  useEffect(() => {
+    const interval = setInterval(() => {
+      // TODO
+      // requesting server for volume info
+      dispatch(getVolume());
+    }, 200);
+    return () => clearInterval(interval);
+  }, []);
 
   // callback for metadata
   const onLoadedMetadata = (e) => {
@@ -121,52 +147,6 @@ function MusicPlayer({ player }) {
     player.toggleRepeat();
   };
 
-  // const togglePlayPause = () => {
-  //   return audioPlayer.current.paused
-  //     ? audioPlayer.current.play()
-  //     : audioPlayer.current.pause();
-  // };
-
-  // DEBUG
-  // useEffect(() => {
-  //   console.log(
-  //     "🚀 ~ file: MusicPlayer.jsx ~ line 64 ~ useEffect ~ player",
-  //     player
-  //   );
-  //   console.log(
-  //     "🚀 ~ file: MusicPlayer.jsx ~ line 68 ~ useEffect ~ player.interface",
-  //     player.interface.info.duration
-  //   );
-  //   console.log(
-  //     "🚀 ~ file: MusicPlayer.jsx ~ line 7 ~ MusicPlayer ~ track",
-  //     track
-  //   );
-  // }, [track]);
-  // END : DEBUG
-
-  // useEffect(() => {
-  //   console.log(
-  //     "🚀 ~ file: MusicPlayer.jsx ~ line 80 ~ useEffect ~ player.interface.audio?.info.duration",
-  //     player.interface.audio?.duration
-  //   );
-  //   setDuration(player.interface.info.duration);
-
-  //   console.log(
-  //     "🚀 ~ file: MusicPlayer.jsx ~ line 81 ~ useEffect ~ player.interface.info.duration",
-  //     player.interface.info.duration
-  //   );
-  //   setName(player.playing?.name);
-  //   console.log(
-  //     "🚀 ~ file: MusicPlayer.jsx ~ line 86 ~ useEffect ~ player.playing?.name",
-  //     player.playing?.name
-  //   );
-  //   setArtist(player.playing?.author);
-  //   console.log(
-  //     "🚀 ~ file: MusicPlayer.jsx ~ line 91 ~ useEffect ~ player.playing?.author",
-  //     player.playing?.author
-  //   );
-  // }, [track]);
-
   useEffect(() => {
     if (player.playing) {
       // console.log(
@@ -185,8 +165,13 @@ function MusicPlayer({ player }) {
   }, [player.playing, player.playingChange]);
 
   const handleVolumeChange = (e, value) => {
-    setVolume(value);
-    audioPlayer.current.volume = value / 100;
+    setCurrVolume(value);
+    // audioPlayer.current.volume = value / 100;
+    dispatch(
+      setVolume({
+        volume: value,
+      })
+    );
   };
 
   const handlePositionChange = (e, value) => {
@@ -318,11 +303,17 @@ function MusicPlayer({ player }) {
             alignItems="center"
           >
             {(() => {
-              if (volume === 0) {
+              if (systemVolume?.volume === 0) {
                 return <MdVolumeOff size={24} />;
-              } else if (volume > 0 && volume <= 25) {
+              } else if (
+                systemVolume?.volume > 0 &&
+                systemVolume?.volume <= 25
+              ) {
                 return <MdVolumeMute size={24} />;
-              } else if (volume > 25 && volume <= 75) {
+              } else if (
+                systemVolume?.volume > 25 &&
+                systemVolume?.volume <= 75
+              ) {
                 return <MdVolumeDown size={24} />;
               } else {
                 return <MdVolumeUp size={24} />;
@@ -330,7 +321,7 @@ function MusicPlayer({ player }) {
             })()}
             <Slider
               aria-label="Volume"
-              value={volume}
+              value={systemVolume ? systemVolume.volume : 0}
               onChange={handleVolumeChange}
             />
           </Stack>

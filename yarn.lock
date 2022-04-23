@@ -2150,6 +2150,11 @@ nanoid@^3.3.1:
   resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.2.tgz#c89622fafb4381cd221421c69ec58547a1eec557"
   integrity sha512-CuHBogktKwpm5g2sRgv83jEy2ijFzBwMoYA60orPDR7ynsLijJDqgsi4RDGj3OJpy3Ieb+LYwiRmIOGyytgITA==
 
+node-audio-volume-mixer@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/node-audio-volume-mixer/-/node-audio-volume-mixer-1.0.3.tgz#fb09148725258d5c948a9b681f92faee1a358917"
+  integrity sha512-eiKURC47Tygbp0RBw5/OewaiEDzo7L5wfNuEGiEl1LpedPuepMnCzQ6cwQTF103RsO9YjaOXcCT+eQaVnCVZJg==
+
 node-releases@^2.0.2:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-2.0.2.tgz#7139fe71e2f4f11b47d4d2986aaf8c48699e0c01"
