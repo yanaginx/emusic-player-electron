@@ -451,7 +451,7 @@ function Settings({ player }) {
             {device ? (
               <>
                 <Typography color="primary">
-                  {device[0].name + ":" + device[0].mac}
+                  {device[0].device_name + ":" + device[0].mac}
                 </Typography>
                 <Button onClick={onDisconnectDevice}>Disconnect</Button>
                 {isLoadingDisconnectDevice ? <CircularProgress /> : <></>}
@@ -480,7 +480,7 @@ function Settings({ player }) {
                 >
                   <CardContent>
                     <Typography gutterBottom>
-                      {device.mac} + {device.name}
+                      {device.mac} + {device.device_name}
                     </Typography>
                   </CardContent>
                 </CardActionArea>
