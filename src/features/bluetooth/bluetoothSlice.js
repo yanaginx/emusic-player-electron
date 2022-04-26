@@ -7,6 +7,9 @@ const initialState = {
   isErrorDevices: false,
   isLoadingDevices: false,
   isSuccessDevices: false,
+  isLoadingGetPaired: false,
+  isSuccessGetPaired: false,
+  isErrorGetPaired: false,
   isSuccessConnectDevice: false,
   isLoadingConnectDevice: false,
   isErrorConnectDevice: false,
@@ -22,6 +25,24 @@ export const getDevices = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       return await bluetoothService.getDevices();
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+// Get paired device at call time
+export const getPairedDevice = createAsyncThunk(
+  "/bluetooth/getPairedDevice",
+  async (_, thunkAPI) => {
+    try {
+      return await bluetoothService.getPairedDevice();
     } catch (error) {
       const message =
         (error.response &&
@@ -69,6 +90,9 @@ export const bluetoothSlice = createSlice({
       state.isLoadingDevices = false;
       state.isErrorDevices = false;
       state.isSuccessDevices = false;
+      state.isLoadingGetPaired = false;
+      state.isSuccessGetPaired = false;
+      state.isErrorGetPaired = false;
       state.isLoadingConnectDevice = false;
       state.isErrorConnectDevice = false;
       state.isSuccessConnectDevice = false;
@@ -94,19 +118,32 @@ export const bluetoothSlice = createSlice({
         state.bluetoothMessage = action.payload;
         state.allDevices = [];
       })
+      .addCase(getPairedDevice.pending, (state) => {
+        state.isLoadingGetPaired = true;
+      })
+      .addCase(getPairedDevice.fulfilled, (state, action) => {
+        state.isLoadingGetPaired = false;
+        state.isSuccessGetPaired = true;
+        state.device = action.payload;
+      })
+      .addCase(getPairedDevice.rejected, (state, action) => {
+        state.isLoadingGetPaired = false;
+        state.isErrorGetPaired = true;
+        state.bluetoothMessage = action.payload;
+        state.device = null;
+      })
       .addCase(connectToDevice.pending, (state) => {
         state.isLoadingConnectDevice = true;
       })
       .addCase(connectToDevice.fulfilled, (state, action) => {
         state.isLoadingConnectDevice = false;
         state.isSuccessConnectDevice = true;
-        state.device = action.payload;
+        state.bluetoothMessage = action.payload;
       })
       .addCase(connectToDevice.rejected, (state, action) => {
         state.isLoadingConnectDevice = false;
         state.isErrorConnectDevice = true;
         state.bluetoothMessage = action.payload;
-        state.device = null;
       })
       .addCase(disconnectFromDevice.pending, (state) => {
         state.isLoadingDisconnectDevice = true;
@@ -114,7 +151,7 @@ export const bluetoothSlice = createSlice({
       .addCase(disconnectFromDevice.fulfilled, (state, action) => {
         state.isLoadingDisconnectDevice = false;
         state.isSuccessDisconnectDevice = true;
-        state.device = action.payload;
+        state.bluetoothMessage = action.payload;
       })
       .addCase(disconnectFromDevice.rejected, (state, action) => {
         state.isLoadingDisconnectDevice = false;

@@ -121,8 +121,14 @@ function Fer({ player }) {
     playMoodPlaylist();
   }, [moodPlaylist]);
 
+  // error logging with toast
+  useEffect(() => {
+    if (isError) {
+      toast.error(message);
+    }
+  }, [isError]);
+
   if (isError) {
-    toast.error(message);
     return (
       <>
         <Box

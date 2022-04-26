@@ -145,18 +145,9 @@ import_electron.ipcMain.on("scanMusicDir", async (event, directoryPath) => {
   let output = await parseMusic(allFiles);
   event.returnValue = output;
 });
-var callbackForBluetoothEvent = null;
-import_electron.ipcMain.on("channelForTerminationSignal", (_) => {
-  callbackForBluetoothEvent("");
-  console.log("Discovery cancelled");
-});
-import_electron.ipcMain.on("channelForSelectingDevice", (event, DeviceId) => {
-  callbackForBluetoothEvent(sentDeviceId);
-  console.log("Device selected, discovery finished");
-});
 function createWindow() {
   const win = new import_electron.BrowserWindow({
-    width: 800,
+    width: 1024,
     height: 600,
     autoHideMenuBar: true,
     frame: false,
@@ -180,7 +171,6 @@ function createWindow() {
     callbackForBluetoothEvent = callback;
     win.webContents.send("channelForBluetoothDeviceList", bluetoothDeviceList);
   });
-  win.maximize();
 }
 import_electron.app.whenReady().then(createWindow);
 import_electron.app.on("window-all-closed", () => {

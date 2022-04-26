@@ -21,6 +21,7 @@ import {
   MdOutlineRemove,
   MdQueueMusic,
   MdOutlineSettings,
+  MdPlaylistPlay,
 } from "react-icons/md";
 
 const modalStyle = {
@@ -109,9 +110,20 @@ function Sidebar() {
               justifyContent: "space-between",
             }}
           >
-            <Typography sx={{ ml: 1, my: 1 }} variant="h5">
-              All Playlists
-            </Typography>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                ml: 1,
+                my: 1,
+              }}
+            >
+              <MdPlaylistPlay size={24} />
+              <Typography sx={{ ml: 1, my: 1 }} variant="h5">
+                All Playlists
+              </Typography>
+            </Box>
+
             <IconButton sx={{ mx: 2 }} size="small" onClick={handlePCModalOpen}>
               <MdPlaylistAdd size={24} />
             </IconButton>

@@ -174,24 +174,10 @@ ipcMain.on("scanMusicDir", async (event, directoryPath) => {
   event.returnValue = output;
 });
 
-var callbackForBluetoothEvent = null;
-
-//cancels Discovery
-ipcMain.on("channelForTerminationSignal", (_) => {
-  callbackForBluetoothEvent(""); //reference to callback of win.webContents.on('select-bluetooth-device'...)
-  console.log("Discovery cancelled");
-});
-
-//resolves navigator.bluetooth.requestDevice() and stops device discovery
-ipcMain.on("channelForSelectingDevice", (event, DeviceId) => {
-  callbackForBluetoothEvent(sentDeviceId); //reference to callback of win.webContents.on('select-bluetooth-device'...)
-  console.log("Device selected, discovery finished");
-});
-
 function createWindow() {
   // Create the main Electron window
   const win = new BrowserWindow({
-    width: 800,
+    width: 1024,
     height: 600,
     autoHideMenuBar: true,
     frame: false,
@@ -230,7 +216,7 @@ function createWindow() {
     }
   );
 
-  win.maximize();
+  // win.maximize();
 }
 
 app.whenReady().then(createWindow);

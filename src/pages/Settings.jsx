@@ -26,6 +26,7 @@ import {
 } from "../features/wifi/wifiSlice";
 import {
   getDevices,
+  getPairedDevice,
   connectToDevice,
   disconnectFromDevice,
   resetBluetooth,
@@ -35,12 +36,8 @@ import {
   disable,
   resetHand,
 } from "../features/handGesture/handGestureSlice";
-import {
-  getVolume,
-  setVolume,
-  resetVolume,
-} from "../features/volume/volumeSlice";
 import useConstructor from "../use.constructor";
+import { toast } from "react-toastify";
 
 const modalStyle = {
   position: "absolute",
@@ -97,6 +94,9 @@ function Settings({ player }) {
     isErrorDevices,
     isLoadingDevices,
     isSuccessDevices,
+    isLoadingGetPaired,
+    isSuccessGetPaired,
+    isErrorGetPaired,
     isSuccessConnectDevice,
     isLoadingConnectDevice,
     isErrorConnectDevice,
@@ -105,17 +105,6 @@ function Settings({ player }) {
     isErrorDisconnectDevice,
     bluetoothMessage,
   } = useSelector((state) => state.bluetooth);
-
-  // Initial state for the volume related
-  const {
-    systemVolume,
-    isLoadingGet,
-    isSuccessGet,
-    isErrorGet,
-    isLoadingSet,
-    isSuccessSet,
-    isErrorSet,
-  } = useSelector((state) => state.volume);
 
   useEffect(() => {
     return () => {
@@ -178,6 +167,37 @@ function Settings({ player }) {
     dispatch(resetBluetooth());
     dispatch(disconnectFromDevice(mac));
   };
+
+  // For wifi error logging
+  useEffect(() => {
+    if (isError || isErrorConnect) {
+      toast.error(message);
+    }
+  }, [isError, isErrorConnect]);
+
+  // For bluetooth error logging
+  useEffect(() => {
+    if (
+      isErrorDevices ||
+      isErrorConnectDevice ||
+      isErrorDisconnectDevice ||
+      isErrorGetPaired
+    ) {
+      toast.error(bluetoothMessage);
+    }
+  }, [
+    isErrorDevices,
+    isErrorConnectDevice,
+    isErrorDisconnectDevice,
+    isErrorGetPaired,
+  ]);
+
+  // For bluetooth success connection
+  useEffect(() => {
+    if (isSuccessConnectDevice) {
+      dispatch(getPairedDevice());
+    }
+  }, [isSuccessConnectDevice, dispatch]);
 
   useEffect(() => {
     console.log("[DEBUG] current ssid: ", currSsid);
@@ -456,15 +476,32 @@ function Settings({ player }) {
         </Typography>
         <Button onClick={onGetDevices}>Get all bluetooth devices</Button>
         {isLoadingConnectDevice ? (
+          <>
+            <CircularProgress />
+            <Typography>Connecting...</Typography>
+          </>
+        ) : (
+          <></>
+        )}
+        {isLoadingGetPaired ? (
           <CircularProgress />
         ) : (
           <>
             {device ? (
               <>
                 <Typography color="primary">
-                  {device[0].device_name + ":" + device[0].mac}
+                  {device.device_name + ":" + device.mac}
                 </Typography>
-                <Button onClick={onDisconnectDevice}>Disconnect</Button>
+                <Button
+                  onClick={() => {
+                    const info = {
+                      mac: device.mac,
+                    };
+                    onDisconnectDevice(info);
+                  }}
+                >
+                  Disconnect
+                </Button>
                 {isLoadingDisconnectDevice ? <CircularProgress /> : <></>}
               </>
             ) : (

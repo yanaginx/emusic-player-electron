@@ -5,6 +5,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { Container, Box, Typography, Paper } from "@mui/material";
 import "./App.css";
+import "./index.css";
 import "react-toastify/dist/ReactToastify.css";
 
 import { Player } from "./models/player.js";
@@ -28,10 +29,47 @@ import Songs from "./pages/Songs";
 import PlaylistSongs from "./pages/PlaylistSongs";
 import Settings from "./pages/Settings";
 
+// Theme setup
+import {
+  ThemeProvider,
+  createTheme,
+  responsiveFontSizes,
+} from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+
+let theme = createTheme({
+  palette: {
+    mode: "dark",
+    primary: {
+      main: "#f06292",
+      // main: "#000000",
+    },
+    secondary: {
+      main: "#3e6990",
+    },
+    success: {
+      main: "#40f99b",
+    },
+  },
+  typography: {
+    fontFamily: "Inter",
+  },
+  spacing: 8,
+  shape: {
+    borderRadius: 10,
+  },
+  props: {
+    MuiAppBar: {
+      color: "default",
+    },
+  },
+});
+
+theme = responsiveFontSizes(theme);
+
 const drawerWidth = 240;
 
 let player = null;
-let theme = null;
 
 function App() {
   console.log(
@@ -73,8 +111,9 @@ function App() {
 
   return (
     <>
-      <>
-        <Router>
+      <Router>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
           <Container sx={{ height: "100%" }}>
             <Box sx={{ display: "flex" }}>
               <Box
@@ -132,9 +171,9 @@ function App() {
               </Box>
             </Box>
           </Container>
-        </Router>
-        <ToastContainer />
-      </>
+        </ThemeProvider>
+      </Router>
+      <ToastContainer toastClassName="dark-toast" />
     </>
   );
 }

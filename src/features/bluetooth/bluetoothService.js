@@ -16,10 +16,21 @@ const connectToDevice = async (info) => {
 
 // Disconnect from network
 const disconnectFromDevice = async (info) => {
-  const response = await axios.get(API_URL + "disconnect", info);
+  const response = await axios.post(API_URL + "disconnect", info);
   return response.data;
 };
 
-const bluetoothService = { getDevices, connectToDevice, disconnectFromDevice };
+// Get paired bluetooth device
+const getPairedDevice = async () => {
+  const response = await axios.get(API_URL + "paired");
+  return response.data;
+};
+
+const bluetoothService = {
+  getDevices,
+  getPairedDevice,
+  connectToDevice,
+  disconnectFromDevice,
+};
 
 export default bluetoothService;

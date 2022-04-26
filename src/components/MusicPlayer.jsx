@@ -112,9 +112,14 @@ function MusicPlayer({ player }) {
         player.next();
         dispatch(setTrack(player.playing));
       } else {
-        setPosition(0);
-        setIsPlaying(false);
-        audioPlayer.current.pause();
+        if (isRepeat) {
+          setPosition(0);
+          audioPlayer.current.play();
+        } else {
+          setPosition(0);
+          setIsPlaying(false);
+          audioPlayer.current.pause();
+        }
       }
     }
   };
@@ -216,11 +221,13 @@ function MusicPlayer({ player }) {
       <Widget>
         <Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
           {/* Track and artist name */}
-          <Box sx={{ width: 300 }}>
-            <Typography variant="h6" noWrap="true">
+          <Box sx={{ maxWidth: 200 }}>
+            <Typography sx={{ width: 200 }} variant="h6" noWrap="true">
               {name}
             </Typography>
-            <Typography variant="button">{artist}</Typography>
+            <Typography variant="button" noWrap="true">
+              {artist}
+            </Typography>
           </Box>
           {/* controllers */}
           <Stack direction="row" alignItems="center">
