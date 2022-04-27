@@ -28,6 +28,7 @@ import Fer from "./pages/Fer";
 import Songs from "./pages/Songs";
 import PlaylistSongs from "./pages/PlaylistSongs";
 import Settings from "./pages/Settings";
+import Search from "./pages/Search";
 
 // Theme setup
 import {
@@ -67,7 +68,7 @@ let theme = createTheme({
 
 theme = responsiveFontSizes(theme);
 
-const drawerWidth = 240;
+const drawerWidth = 210;
 
 let player = null;
 
@@ -118,7 +119,8 @@ function App() {
             <Box sx={{ display: "flex" }}>
               <Box
                 component="nav"
-                sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+                // sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+                sx={{ width: drawerWidth }}
                 aria-label="mailbox folders"
               >
                 <Sidebar player={player} />
@@ -126,7 +128,7 @@ function App() {
               <Box
                 component="main"
                 sx={{
-                  p: 3,
+                  p: 2,
                   width: "100%",
                 }}
               >
@@ -150,6 +152,7 @@ function App() {
                     path="/settings"
                     element={<Settings player={player} />}
                   />
+                  <Route path="/search" element={<Search player={player} />} />
                 </Routes>
               </Box>
               <Box>
@@ -173,7 +176,7 @@ function App() {
           </Container>
         </ThemeProvider>
       </Router>
-      <ToastContainer toastClassName="dark-toast" />
+      <ToastContainer theme="dark" />
     </>
   );
 }

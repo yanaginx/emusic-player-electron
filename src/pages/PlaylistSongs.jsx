@@ -5,6 +5,9 @@ import {
   Box,
   List,
   Typography,
+  Card,
+  CardContent,
+  CardActions,
 } from "@mui/material";
 import { MdHome } from "react-icons/md";
 import { Link, useParams } from "react-router-dom";
@@ -74,7 +77,7 @@ function PlaylistSongs({ player }) {
     <>
       <Box>
         <Toolbar>
-          <Link to="/">
+          {/* <Link to="/">
             <IconButton
               size="large"
               edge="start"
@@ -84,7 +87,7 @@ function PlaylistSongs({ player }) {
             >
               <MdHome />
             </IconButton>
-          </Link>
+          </Link> */}
           {allSongs.length > 0 ? (
             <IconButton
               size="large"
@@ -100,17 +103,32 @@ function PlaylistSongs({ player }) {
         </Toolbar>
         {/* <Box sx={{ height: `600px`, overflowY: "auto" }}> */}
         {allSongs.length === 0 ? (
-          <Box sx={{ mt: 2 }}>
-            <Typography variant="h5" color="text.secondary">
-              This playlist have no songs. Adding one by going to the library
-              and select your preferences
-            </Typography>
-            <Button variant="outlined" onClick={goToLibrary}>
-              Go to library
-            </Button>
-          </Box>
+          <>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              minHeight="100vh - 90rem"
+            >
+              <Card>
+                <CardContent>
+                  <Typography variant="h6" component="h6">
+                    This playlist have no songs. Adding one by going to the
+                    library and select your preferences
+                  </Typography>
+                </CardContent>
+                <CardActions>
+                  <Button variant="outlined" onClick={goToLibrary}>
+                    Go to library
+                  </Button>
+                </CardActions>
+              </Card>
+            </Box>
+          </>
         ) : (
-          <Box sx={{ height: `600px`, overflowY: "auto" }}>
+          <Box sx={{ height: `470px`, overflowY: "auto" }}>
             {playlist?.content.map((songData) => (
               <PlaylistSongItem
                 key={songData.id}

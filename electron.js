@@ -176,6 +176,7 @@ ipcMain.on("scanMusicDir", async (event, directoryPath) => {
 
 function createWindow() {
   // Create the main Electron window
+  let devtools = IS_DEV ? true : false;
   const win = new BrowserWindow({
     width: 1024,
     height: 600,
@@ -187,6 +188,7 @@ function createWindow() {
       contextIsolation: true,
       webSecurity: false,
       preload: path.join(__dirname, "preload.js"),
+      devTools: devtools,
     },
   });
 

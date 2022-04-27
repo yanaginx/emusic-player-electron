@@ -12,7 +12,7 @@ import {
   Modal,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { setTrack, reset } from "../features/track/trackSlice";
 import { MdRemove, MdMenu, MdPlaylistAdd } from "react-icons/md";
 import React from "react";
@@ -27,6 +27,16 @@ function SongItem({ player, data, deleteTrack, addToPlaylist }) {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const [bigAnchorEl, setBigAnchorEl] = useState(null);
+  const bigOpen = Boolean(bigAnchorEl);
+  const bigHandleClick = (event) => {
+    setBigAnchorEl(event.currentTarget);
+  };
+  const bigHandleClose = () => {
+    setBigAnchorEl(null);
+  };
+
   // PA modal is for playlist addition
   // playlist name for playlist creation
   const [playlistId, setPlaylistId] = useState(null);
@@ -52,6 +62,7 @@ function SongItem({ player, data, deleteTrack, addToPlaylist }) {
       {/* <Card sx={{ m: 2 }}> */}
       {/* <Box */}
       <ListItem
+        key={data.id}
         sx={{
           display: "flex",
           alignItems: "center",
@@ -60,10 +71,8 @@ function SongItem({ player, data, deleteTrack, addToPlaylist }) {
       >
         <CardActionArea onClick={setCurrentTrack}>
           <CardContent>
-            <Typography variant="h5">{data.name}</Typography>
-            <Typography variant="h6" color="text.secondary">
-              {data.author}
-            </Typography>
+            <Typography variant="h6">{data.name}</Typography>
+            <Typography color="text.secondary">{data.author}</Typography>
           </CardContent>
         </CardActionArea>
         <IconButton onClick={removeTrack}>

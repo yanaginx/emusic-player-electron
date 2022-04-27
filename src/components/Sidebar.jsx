@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
-import { useDeepCompareEffect } from "react-use";
+import { useDispatch, useSelector } from "react-redux";
 import { EPlayerContext } from "../contexts/EPlayerContext";
 import React from "react";
 import {
@@ -21,8 +21,11 @@ import {
   MdOutlineRemove,
   MdQueueMusic,
   MdOutlineSettings,
-  MdPlaylistPlay,
+  MdDashboard,
+  MdOutlineSearch,
 } from "react-icons/md";
+
+import { setPlaylistChange } from "../features/playlistChange/playlistChangeSlice";
 
 const modalStyle = {
   position: "absolute",
@@ -37,10 +40,13 @@ const modalStyle = {
   px: 4,
   pb: 3,
 };
-const drawerWidth = 240;
+const drawerWidth = 210;
 
 function Sidebar() {
+  const dispatch = useDispatch();
+  const { isPlaylistChange } = useSelector((state) => state.playlistChange);
   const player = useContext(EPlayerContext);
+
   // PC modal is for playlist creation
   const [openPCModal, setOpenPCModal] = useState(false);
   const handlePCModalOpen = () => {
@@ -59,11 +65,14 @@ function Sidebar() {
     player.createPlaylist(name);
     setOpenPCModal(false);
     setPlaylists(player.playlists);
+    dispatch(setPlaylistChange(!isPlaylistChange));
+    setPlaylistName("");
   };
 
   const removePlaylist = (playlist) => {
     setPlaylists(playlists.filter((item) => item.id !== playlist.id));
     player.deleteItem(playlist);
+    dispatch(setPlaylistChange(!isPlaylistChange));
   };
 
   return (
@@ -79,11 +88,12 @@ function Sidebar() {
           "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth },
         }}
         open
+        PaperProps={{ elevation: 20 }}
       >
         <div>
           <Toolbar />
           <Divider />
-          <Box
+          {/* <Box
             sx={{
               display: "flex",
               alignItems: "center",
@@ -91,18 +101,74 @@ function Sidebar() {
               my: 1,
             }}
           >
-            <MdQueueMusic size={24} />
-            <Typography sx={{ mx: 1 }} variant="h5">
-              My Music
-            </Typography>
-          </Box>
+            
+          </Box> */}
+          <Link to="/" style={{ textDecoration: "none" }}>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <MenuItem sx={{ width: "100%", paddingX: 2, paddingY: 1 }}>
+                <MdDashboard size={34} />
+                <Typography sx={{ mx: 1, fontSize: 19, fontWeight: 450 }}>
+                  Dashboard
+                </Typography>
+              </MenuItem>
+            </Box>
+          </Link>
+          <Link to="/search" style={{ textDecoration: "none" }}>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <MenuItem sx={{ width: "100%", paddingX: 2, paddingY: 1 }}>
+                <MdOutlineSearch size={34} />
+                <Typography sx={{ mx: 1, fontSize: 19, fontWeight: 450 }}>
+                  Search
+                </Typography>
+              </MenuItem>
+            </Box>
+          </Link>
           <Link to="/all-songs" style={{ textDecoration: "none" }}>
-            <MenuItem>
-              <Typography variant="h6" color="text.secondary">
-                All songs
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <MenuItem sx={{ width: "100%", paddingX: 2, paddingY: 1 }}>
+                <MdQueueMusic size={34} />
+                <Typography sx={{ mx: 1, fontSize: 19, fontWeight: 450 }}>
+                  Library
+                </Typography>
+              </MenuItem>
+            </Box>
+          </Link>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <MenuItem
+              onClick={handlePCModalOpen}
+              sx={{ width: "100%", paddingX: 2, paddingY: 1 }}
+            >
+              <MdPlaylistAdd size={34} />
+              <Typography sx={{ mx: 1, fontSize: 19, fontWeight: 450 }}>
+                Add playlist
               </Typography>
             </MenuItem>
-          </Link>
+          </Box>
+          <Divider />
+
           <Box
             sx={{
               display: "flex",
@@ -110,23 +176,6 @@ function Sidebar() {
               justifyContent: "space-between",
             }}
           >
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                ml: 1,
-                my: 1,
-              }}
-            >
-              <MdPlaylistPlay size={24} />
-              <Typography sx={{ ml: 1, my: 1 }} variant="h5">
-                All Playlists
-              </Typography>
-            </Box>
-
-            <IconButton sx={{ mx: 2 }} size="small" onClick={handlePCModalOpen}>
-              <MdPlaylistAdd size={24} />
-            </IconButton>
             <Modal
               open={openPCModal}
               onClose={handlePCModalClose}
@@ -134,7 +183,7 @@ function Sidebar() {
               aria-describedby="parent-modal-description"
             >
               <Box sx={{ ...modalStyle }}>
-                <Typography sx={{ my: 1 }} variant="h5">
+                <Typography sx={{ my: 1 }} variant="h6">
                   Create new playlist
                 </Typography>
                 <TextField
@@ -155,49 +204,67 @@ function Sidebar() {
             </Modal>
           </Box>
           {/* Playlist listing */}
-          {playlists.map((playlist) => (
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Link
-                to={`/playlist/${playlist.id}`}
-                style={{ textDecoration: "none" }}
+          <Box sx={{ height: `300px`, overflowY: "auto" }}>
+            {playlists.map((playlist) => (
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+                key={playlist.id}
               >
-                <MenuItem>
-                  <Typography variant="h6" color="text.secondary">
-                    {playlist.name}
+                <Link
+                  to={`/playlist/${playlist.id}`}
+                  style={{ textDecoration: "none" }}
+                >
+                  <MenuItem>
+                    <Typography
+                      sx={{ overflowY: "auto", width: 100 }}
+                      noWrap="true"
+                      color="text.secondary"
+                    >
+                      {playlist.name}
+                    </Typography>
+                  </MenuItem>
+                </Link>
+                <IconButton
+                  sx={{ mx: 2 }}
+                  onClick={() => removePlaylist(playlist)}
+                >
+                  <MdOutlineRemove size={24} />
+                </IconButton>
+              </Box>
+            ))}
+          </Box>
+
+          {/* Settings */}
+          <Box
+            sx={{
+              position: "fixed",
+              bottom: 0,
+              textAlign: "center",
+              paddingBottom: "90px",
+              width: drawerWidth,
+            }}
+          >
+            <Link to={`/settings`} style={{ textDecoration: "none" }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <MenuItem sx={{ width: "100%", paddingX: 2, paddingY: 1 }}>
+                  <MdOutlineSettings size={32} />
+                  <Typography sx={{ mx: 1 }} variant="h6">
+                    Settings
                   </Typography>
                 </MenuItem>
-              </Link>
-              <IconButton
-                sx={{ mx: 2 }}
-                onClick={() => removePlaylist(playlist)}
-              >
-                <MdOutlineRemove size={24} />
-              </IconButton>
-            </Box>
-          ))}
-          {/* Settings */}
-          <Link to={`/settings`} style={{ textDecoration: "none" }}>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <MenuItem sx={{ width: "100%" }}>
-                <MdOutlineSettings size={24} />
-                <Typography sx={{ mx: 1 }} variant="h5">
-                  Settings
-                </Typography>
-              </MenuItem>
-            </Box>
-          </Link>
+              </Box>
+            </Link>
+          </Box>
         </div>
       </Drawer>
     </Box>

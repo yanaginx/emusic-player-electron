@@ -36,15 +36,17 @@ const TinyText = styled(Typography)({
 
 const Widget = styled("div")(({ theme }) => ({
   padding: 16,
-  borderRadius: 16,
-  width: "90%",
+  // borderRadius: 16,
+  width: "100%",
+  height: 90,
   maxWidth: "100%",
   margin: "auto",
   position: "relative",
   alignItems: "center",
   zIndex: 1,
-  backgroundColor: "rgba(255,255,255,0.4)",
   backdropFilter: "blur(40px)",
+  backgroundColor:
+    theme.palette.mode === "dark" ? "rgba(0,0,0,0.6)" : "rgba(255,255,255,0.4)",
 }));
 
 const track = {
@@ -222,10 +224,14 @@ function MusicPlayer({ player }) {
         <Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
           {/* Track and artist name */}
           <Box sx={{ maxWidth: 200 }}>
-            <Typography sx={{ width: 200 }} variant="h6" noWrap="true">
+            <Typography sx={{ width: 200, fontSize: "1rem" }} noWrap>
               {name}
             </Typography>
-            <Typography variant="button" noWrap="true">
+            <Typography
+              sx={{ fontWeight: 200, fontSize: "0.75rem" }}
+              color="text.secondary"
+              noWrap
+            >
               {artist}
             </Typography>
           </Box>
@@ -311,19 +317,19 @@ function MusicPlayer({ player }) {
           >
             {(() => {
               if (systemVolume?.volume === 0) {
-                return <MdVolumeOff size={24} />;
+                return <MdVolumeOff size={32} />;
               } else if (
                 systemVolume?.volume > 0 &&
                 systemVolume?.volume <= 25
               ) {
-                return <MdVolumeMute size={24} />;
+                return <MdVolumeMute size={32} />;
               } else if (
                 systemVolume?.volume > 25 &&
-                systemVolume?.volume <= 75
+                systemVolume?.volume <= 50
               ) {
-                return <MdVolumeDown size={24} />;
+                return <MdVolumeDown size={32} />;
               } else {
-                return <MdVolumeUp size={24} />;
+                return <MdVolumeUp size={32} />;
               }
             })()}
             <Slider

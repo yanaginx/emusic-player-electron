@@ -29,8 +29,8 @@ function Songs({ player }) {
   return (
     <>
       <Box>
-        <Toolbar>
-          <Link to="/">
+        {/* <Toolbar> */}
+        {/* <Link to="/">
             <IconButton
               size="large"
               edge="start"
@@ -40,10 +40,10 @@ function Songs({ player }) {
             >
               <MdHome />
             </IconButton>
-          </Link>
-        </Toolbar>
+          </Link> */}
+        {/* </Toolbar> */}
         {/* <Box sx={{ height: `100%`, overflowY: "auto" }}> */}
-        <List sx={{ height: `600px`, overflowY: "auto" }}>
+        <List sx={{ height: `460px`, overflowY: "auto" }}>
           {allSongs.map((songData) => (
             <SongItem
               key={songData.id.toString()}

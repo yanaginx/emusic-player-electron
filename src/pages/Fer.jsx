@@ -137,7 +137,7 @@ function Fer({ player }) {
             justifyContent: "center",
             alignItems: "center",
           }}
-          minHeight="100vh - 200px"
+          minHeight="100vh - 90rem"
         >
           <Card>
             <CardContent>

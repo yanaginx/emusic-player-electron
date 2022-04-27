@@ -146,6 +146,7 @@ import_electron.ipcMain.on("scanMusicDir", async (event, directoryPath) => {
   event.returnValue = output;
 });
 function createWindow() {
+  let devtools = IS_DEV ? true : false;
   const win = new import_electron.BrowserWindow({
     width: 1024,
     height: 600,
@@ -156,7 +157,8 @@ function createWindow() {
       worldSafeExecuteJavaScript: true,
       contextIsolation: true,
       webSecurity: false,
-      preload: import_path.default.join(__dirname, "preload.js")
+      preload: import_path.default.join(__dirname, "preload.js"),
+      devTools: devtools
     }
   });
   if (IS_DEV) {

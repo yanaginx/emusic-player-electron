@@ -48,11 +48,12 @@ Functionality implemented:
     - Volume might not work on Linux (since the library use for controlling volume is specifically for windows).
   - Bluetooth scanning and connecting (Haven't test yet, will deploy on board where `bluetoothctl` is available).
   - System volume control (No smoothness since api calls must be made).
+  - Simple online songs search and download using zing mp3 API.
 
 TODO:
 
 - Implement: Proper UI.
-- Implement: Currently playing queue fullscreen
+<!-- - Implement: Currently playing queue fullscreen -->
 
 Current issue:
 

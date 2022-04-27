@@ -55,6 +55,9 @@ const modalStyle = {
 
 function Settings({ player }) {
   const [devices, setDevices] = useState([]);
+  const [playlist, setPlaylists] = useState(player.playlists);
+
+  const { isPlaylistChange } = useSelector((state) => state.playlistChange);
 
   // useConstructor(() => {
   //   let list = [];
@@ -68,10 +71,10 @@ function Settings({ player }) {
 
   // useEffect(() => {
   //   console.log(
-  //     "🚀 ~ file: Settings.jsx ~ line 45 ~ useEffect ~ devices",
-  //     devices
+  //     "🚀 ~ file: Settings.jsx ~ line 74 ~ useEffect ~ playlistChange",
+  //     isPlaylistChange
   //   );
-  // }, [devices]);
+  // }, [isPlaylistChange]);
 
   const dispatch = useDispatch();
   // Initial state for the wifi related
