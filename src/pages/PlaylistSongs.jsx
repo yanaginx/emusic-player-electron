@@ -9,13 +9,12 @@ import {
   CardContent,
   CardActions,
 } from "@mui/material";
-import { MdHome } from "react-icons/md";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { setTrack, reset } from "../features/track/trackSlice";
-import { MdPlayCircle } from "react-icons/md";
+import { MdPlayCircle, MdHome } from "react-icons/md";
+import ColoredScrollbars from "../components/ColoredScrollbars";
 
 import PlaylistSongItem from "../components/PlaylistSongItem";
 
@@ -128,7 +127,8 @@ function PlaylistSongs({ player }) {
             </Box>
           </>
         ) : (
-          <Box sx={{ height: `470px`, overflowY: "auto" }}>
+          // <Box sx={{ height: `470px`, overflowY: "auto" }}>
+          <ColoredScrollbars style={{ height: 400 }}>
             {playlist?.content.map((songData) => (
               <PlaylistSongItem
                 key={songData.id}
@@ -138,7 +138,7 @@ function PlaylistSongs({ player }) {
                 deleteTrack={deleteTrack}
               />
             ))}
-          </Box>
+          </ColoredScrollbars>
         )}
         {/* </Box> */}
       </Box>

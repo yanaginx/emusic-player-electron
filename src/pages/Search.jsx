@@ -17,6 +17,8 @@ import { resetSearch, searchSongs } from "../features/search/searchSlice";
 
 import SearchResult from "../components/SearchResult";
 import { toast } from "react-toastify";
+import { Scrollbars } from "react-custom-scrollbars-2";
+import ColoredScrollbars from "../components/ColoredScrollbars";
 
 function Search({ player }) {
   const dispatch = useDispatch();
@@ -111,11 +113,12 @@ function Search({ player }) {
       {isLoadingSearch ? (
         <LinearProgress />
       ) : (
-        <List sx={{ paddingTop: `10px`, height: `420px`, overflowY: "auto" }}>
+        // <List sx={{ paddingTop: `10px`, height: `420px`, overflowY: "auto" }}>
+        <ColoredScrollbars style={{ height: "420px" }}>
           {searchResult?.map((song) => (
             <SearchResult data={song} player={player} />
           ))}
-        </List>
+        </ColoredScrollbars>
       )}
     </>
   );

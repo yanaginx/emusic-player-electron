@@ -3,6 +3,7 @@ import { MdHome } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { List } from "@mui/material";
+import ColoredScrollbars from "../components/ColoredScrollbars";
 
 import SongItem from "../components/SongItem";
 
@@ -43,7 +44,8 @@ function Songs({ player }) {
           </Link> */}
         {/* </Toolbar> */}
         {/* <Box sx={{ height: `100%`, overflowY: "auto" }}> */}
-        <List sx={{ height: `460px`, overflowY: "auto" }}>
+        {/* <List sx={{ height: `460px`, overflowY: "auto" }}> */}
+        <ColoredScrollbars style={{ height: 460 }}>
           {allSongs.map((songData) => (
             <SongItem
               key={songData.id.toString()}
@@ -54,7 +56,8 @@ function Songs({ player }) {
               playlists={playlists}
             />
           ))}
-        </List>
+        </ColoredScrollbars>
+        {/* </List> */}
         {/* </Box> */}
       </Box>
     </>

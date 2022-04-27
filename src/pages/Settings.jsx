@@ -38,6 +38,7 @@ import {
 } from "../features/handGesture/handGestureSlice";
 import useConstructor from "../use.constructor";
 import { toast } from "react-toastify";
+import ColoredScrollbars from "../components/ColoredScrollbars";
 
 const modalStyle = {
   position: "absolute",
@@ -266,280 +267,282 @@ function Settings({ player }) {
         <Typography variant="h3">Settings</Typography>
       </Box>
       <Divider />
-      {/* Enable and disable hand gesture */}
-      <Box marginBottom={6} marginTop={3}>
-        <Typography variant="h5">Hand Gesture</Typography>
-        <Box>{isOn ? <Typography> Opened</Typography> : <></>}</Box>
-        {!isOn ? (
-          <Button
-            onClick={() => {
-              dispatch(enable());
-            }}
-          >
-            Enable
-          </Button>
-        ) : (
-          <Button
-            onClick={() => {
-              dispatch(disable());
-            }}
-          >
-            Disable
-          </Button>
-        )}
-      </Box>
-      {/* Options for mood - playlist mapping  */}
-      <Box marginBottom={6} marginTop={3}>
-        <Typography marginBottom={2} variant="h5">
-          Emotion-based playlist option
-        </Typography>
-
-        {/* Happy mood playlist select */}
-        <Box my={2}>
-          <FormControl sx={{ width: "50%" }}>
-            <InputLabel id="happy-mood-playlist-selector">
-              Happy mood
-            </InputLabel>
-            <Select
-              labelId="happy-mood-playlist-selector"
-              id="happy-mood-selector"
-              value={happy}
-              label="Happy mood"
-              onChange={handleHappyPlaylist}
+      <ColoredScrollbars style={{ height: "320px" }}>
+        {/* Enable and disable hand gesture */}
+        <Box marginBottom={6} marginTop={3}>
+          <Typography variant="h5">Hand Gesture</Typography>
+          <Box>{isOn ? <Typography> Opened</Typography> : <></>}</Box>
+          {!isOn ? (
+            <Button
+              onClick={() => {
+                dispatch(enable());
+              }}
             >
-              {player.playlists.map((playlist) => (
-                <MenuItem value={playlist.id}>{playlist.name}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Box>
-
-        {/* Sad mood playlist select */}
-        <Box my={2}>
-          <FormControl sx={{ width: "50%" }}>
-            <InputLabel id="sad-mood-playlist-selector">Sad mood</InputLabel>
-            <Select
-              labelId="sad-mood-playlist-selector"
-              id="sad-mood-selector"
-              value={sad}
-              label="Sad mood"
-              onChange={handleSadPlaylist}
+              Enable
+            </Button>
+          ) : (
+            <Button
+              onClick={() => {
+                dispatch(disable());
+              }}
             >
-              {player.playlists.map((playlist) => (
-                <MenuItem value={playlist.id}>{playlist.name}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+              Disable
+            </Button>
+          )}
         </Box>
-
-        {/* Surprise mood playlist select */}
-        <Box my={2}>
-          <FormControl sx={{ width: "50%" }}>
-            <InputLabel id="surprise-mood-playlist-selector">
-              Surprise mood
-            </InputLabel>
-            <Select
-              labelId="surprise-mood-playlist-selector"
-              id="surprise-mood-selector"
-              value={surprise}
-              label="Surprise mood"
-              onChange={handleSurprisePlaylist}
-            >
-              {player.playlists.map((playlist) => (
-                <MenuItem value={playlist.id}>{playlist.name}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Box>
-
-        {/* Angry mood playlist select */}
-        <Box my={2}>
-          <FormControl sx={{ width: "50%" }}>
-            <InputLabel id="angry-mood-playlist-selector">
-              Angry mood
-            </InputLabel>
-            <Select
-              labelId="angry-mood-playlist-selector"
-              id="angry-mood-selector"
-              value={angry}
-              label="Angry mood"
-              onChange={handleAngryPlaylist}
-            >
-              {player.playlists.map((playlist) => (
-                <MenuItem value={playlist.id}>{playlist.name}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Box>
-
-        {/* Neutral mood playlist select */}
-        <Box my={2}>
-          <FormControl sx={{ width: "50%" }}>
-            <InputLabel id="neutral-mood-playlist-selector">
-              Neutral mood
-            </InputLabel>
-            <Select
-              labelId="neutral-mood-playlist-selector"
-              id="neutral-mood-selector"
-              value={neutral}
-              label="Neutral mood"
-              onChange={handleNeutralPlaylist}
-            >
-              {player.playlists.map((playlist) => (
-                <MenuItem value={playlist.id}>{playlist.name}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Box>
-      </Box>
-
-      {/* Options for wifi setup  */}
-      <Box marginBottom={6} marginTop={3}>
-        <Typography marginBottom={2} variant="h5">
-          Wifi setup
-        </Typography>
-        <Button onClick={onGetNetworks}>Get all connections</Button>
-        {isLoadingConnect ? (
-          <CircularProgress />
-        ) : (
-          <>
-            {connection ? (
-              <>
-                <Typography color="primary">{connection[0].ssid}</Typography>
-                <Button onClick={onDisconnect}>Disconnect</Button>
-              </>
-            ) : (
-              <></>
-            )}
-          </>
-        )}
-        {isLoading ? (
-          <>
-            <CircularProgress />
-          </>
-        ) : (
-          <List>
-            {allConnections.map((connection) => (
-              <ListItem>
-                <CardActionArea
-                  onClick={() => {
-                    handleConnectModalOpen(connection.ssid);
-                  }}
-                >
-                  <CardContent>
-                    <Typography gutterBottom>
-                      {connection.ssid} + {connection.quality}
-                    </Typography>
-                  </CardContent>
-                </CardActionArea>
-              </ListItem>
-            ))}
-          </List>
-        )}
-      </Box>
-      <Modal
-        open={openConnectModal}
-        onClose={handleConnectModalClose}
-        aria-labelledby="parent-modal-title"
-        aria-describedby="parent-modal-description"
-      >
-        <Box sx={{ ...modalStyle }}>
-          <Typography sx={{ my: 1 }} variant="h4">
-            Connect to wifi network
+        {/* Options for mood - playlist mapping  */}
+        <Box marginBottom={6} marginTop={3}>
+          <Typography marginBottom={2} variant="h5">
+            Emotion-based playlist option
           </Typography>
-          <Typography sx={{ my: 1 }} variant="body1">
-            {currSsid}
-          </Typography>
-          <TextField
-            fullWidth
-            label="password"
-            variant="standard"
-            type="password"
-            value={currPassword}
-            onChange={(e) => setCurrPassword(e.target.value)}
-          />
-          <Button
-            onClick={() => {
-              const info = {
-                ssid: currSsid,
-                password: currPassword,
-              };
-              onConnectNetwork(info);
-            }}
-          >
-            Connect
-          </Button>
-        </Box>
-      </Modal>
 
-      {/* Option for bluetooth setup */}
-      <Box marginBottom={6} marginTop={3}>
-        <Typography marginBottom={2} variant="h5">
-          Bluetooth setup
-        </Typography>
-        <Button onClick={onGetDevices}>Get all bluetooth devices</Button>
-        {isLoadingConnectDevice ? (
-          <>
+          {/* Happy mood playlist select */}
+          <Box my={2}>
+            <FormControl sx={{ width: "50%" }}>
+              <InputLabel id="happy-mood-playlist-selector">
+                Happy mood
+              </InputLabel>
+              <Select
+                labelId="happy-mood-playlist-selector"
+                id="happy-mood-selector"
+                value={happy}
+                label="Happy mood"
+                onChange={handleHappyPlaylist}
+              >
+                {player.playlists.map((playlist) => (
+                  <MenuItem value={playlist.id}>{playlist.name}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Box>
+
+          {/* Sad mood playlist select */}
+          <Box my={2}>
+            <FormControl sx={{ width: "50%" }}>
+              <InputLabel id="sad-mood-playlist-selector">Sad mood</InputLabel>
+              <Select
+                labelId="sad-mood-playlist-selector"
+                id="sad-mood-selector"
+                value={sad}
+                label="Sad mood"
+                onChange={handleSadPlaylist}
+              >
+                {player.playlists.map((playlist) => (
+                  <MenuItem value={playlist.id}>{playlist.name}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Box>
+
+          {/* Surprise mood playlist select */}
+          <Box my={2}>
+            <FormControl sx={{ width: "50%" }}>
+              <InputLabel id="surprise-mood-playlist-selector">
+                Surprise mood
+              </InputLabel>
+              <Select
+                labelId="surprise-mood-playlist-selector"
+                id="surprise-mood-selector"
+                value={surprise}
+                label="Surprise mood"
+                onChange={handleSurprisePlaylist}
+              >
+                {player.playlists.map((playlist) => (
+                  <MenuItem value={playlist.id}>{playlist.name}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Box>
+
+          {/* Angry mood playlist select */}
+          <Box my={2}>
+            <FormControl sx={{ width: "50%" }}>
+              <InputLabel id="angry-mood-playlist-selector">
+                Angry mood
+              </InputLabel>
+              <Select
+                labelId="angry-mood-playlist-selector"
+                id="angry-mood-selector"
+                value={angry}
+                label="Angry mood"
+                onChange={handleAngryPlaylist}
+              >
+                {player.playlists.map((playlist) => (
+                  <MenuItem value={playlist.id}>{playlist.name}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Box>
+
+          {/* Neutral mood playlist select */}
+          <Box my={2}>
+            <FormControl sx={{ width: "50%" }}>
+              <InputLabel id="neutral-mood-playlist-selector">
+                Neutral mood
+              </InputLabel>
+              <Select
+                labelId="neutral-mood-playlist-selector"
+                id="neutral-mood-selector"
+                value={neutral}
+                label="Neutral mood"
+                onChange={handleNeutralPlaylist}
+              >
+                {player.playlists.map((playlist) => (
+                  <MenuItem value={playlist.id}>{playlist.name}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Box>
+        </Box>
+
+        {/* Options for wifi setup  */}
+        <Box marginBottom={6} marginTop={3}>
+          <Typography marginBottom={2} variant="h5">
+            Wifi setup
+          </Typography>
+          <Button onClick={onGetNetworks}>Get all connections</Button>
+          {isLoadingConnect ? (
             <CircularProgress />
-            <Typography>Connecting...</Typography>
-          </>
-        ) : (
-          <></>
-        )}
-        {isLoadingGetPaired ? (
-          <CircularProgress />
-        ) : (
-          <>
-            {device ? (
-              <>
-                <Typography color="primary">
-                  {device.device_name + ":" + device.mac}
-                </Typography>
-                <Button
-                  onClick={() => {
-                    const info = {
-                      mac: device.mac,
-                    };
-                    onDisconnectDevice(info);
-                  }}
-                >
-                  Disconnect
-                </Button>
-                {isLoadingDisconnectDevice ? <CircularProgress /> : <></>}
-              </>
-            ) : (
-              <></>
-            )}
-          </>
-        )}
-        {isLoadingDevices ? (
-          <>
+          ) : (
+            <>
+              {connection ? (
+                <>
+                  <Typography color="primary">{connection[0].ssid}</Typography>
+                  <Button onClick={onDisconnect}>Disconnect</Button>
+                </>
+              ) : (
+                <></>
+              )}
+            </>
+          )}
+          {isLoading ? (
+            <>
+              <CircularProgress />
+            </>
+          ) : (
+            <List>
+              {allConnections.map((connection) => (
+                <ListItem>
+                  <CardActionArea
+                    onClick={() => {
+                      handleConnectModalOpen(connection.ssid);
+                    }}
+                  >
+                    <CardContent>
+                      <Typography gutterBottom>
+                        {connection.ssid} + {connection.quality}
+                      </Typography>
+                    </CardContent>
+                  </CardActionArea>
+                </ListItem>
+              ))}
+            </List>
+          )}
+        </Box>
+        <Modal
+          open={openConnectModal}
+          onClose={handleConnectModalClose}
+          aria-labelledby="parent-modal-title"
+          aria-describedby="parent-modal-description"
+        >
+          <Box sx={{ ...modalStyle }}>
+            <Typography sx={{ my: 1 }} variant="h4">
+              Connect to wifi network
+            </Typography>
+            <Typography sx={{ my: 1 }} variant="body1">
+              {currSsid}
+            </Typography>
+            <TextField
+              fullWidth
+              label="password"
+              variant="standard"
+              type="password"
+              value={currPassword}
+              onChange={(e) => setCurrPassword(e.target.value)}
+            />
+            <Button
+              onClick={() => {
+                const info = {
+                  ssid: currSsid,
+                  password: currPassword,
+                };
+                onConnectNetwork(info);
+              }}
+            >
+              Connect
+            </Button>
+          </Box>
+        </Modal>
+
+        {/* Option for bluetooth setup */}
+        <Box marginBottom={6} marginTop={3}>
+          <Typography marginBottom={2} variant="h5">
+            Bluetooth setup
+          </Typography>
+          <Button onClick={onGetDevices}>Get all bluetooth devices</Button>
+          {isLoadingConnectDevice ? (
+            <>
+              <CircularProgress />
+              <Typography>Connecting...</Typography>
+            </>
+          ) : (
+            <></>
+          )}
+          {isLoadingGetPaired ? (
             <CircularProgress />
-          </>
-        ) : (
-          <List>
-            {allDevices.map((device) => (
-              <ListItem>
-                <CardActionArea
-                  onClick={() => {
-                    setMacAddr(device.mac);
-                    const info = {
-                      mac: device.mac,
-                    };
-                    onConnectDevice(info);
-                  }}
-                >
-                  <CardContent>
-                    <Typography gutterBottom>
-                      {device.mac} + {device.device_name}
-                    </Typography>
-                  </CardContent>
-                </CardActionArea>
-              </ListItem>
-            ))}
-          </List>
-        )}
-      </Box>
+          ) : (
+            <>
+              {device ? (
+                <>
+                  <Typography color="primary">
+                    {device.device_name + ":" + device.mac}
+                  </Typography>
+                  <Button
+                    onClick={() => {
+                      const info = {
+                        mac: device.mac,
+                      };
+                      onDisconnectDevice(info);
+                    }}
+                  >
+                    Disconnect
+                  </Button>
+                  {isLoadingDisconnectDevice ? <CircularProgress /> : <></>}
+                </>
+              ) : (
+                <></>
+              )}
+            </>
+          )}
+          {isLoadingDevices ? (
+            <>
+              <CircularProgress />
+            </>
+          ) : (
+            <List>
+              {allDevices.map((device) => (
+                <ListItem>
+                  <CardActionArea
+                    onClick={() => {
+                      setMacAddr(device.mac);
+                      const info = {
+                        mac: device.mac,
+                      };
+                      onConnectDevice(info);
+                    }}
+                  >
+                    <CardContent>
+                      <Typography gutterBottom>
+                        {device.mac} + {device.device_name}
+                      </Typography>
+                    </CardContent>
+                  </CardActionArea>
+                </ListItem>
+              ))}
+            </List>
+          )}
+        </Box>
+      </ColoredScrollbars>
     </Box>
   );
 }
