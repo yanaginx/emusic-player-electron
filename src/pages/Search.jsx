@@ -45,6 +45,7 @@ function Search({ player }) {
   useEffect(() => {
     if (isSuccessDownload) {
       player.scanMusicDir();
+      player.saveProfiles();
       toast.dismiss();
       toast.success(downloadMessage.message);
     }

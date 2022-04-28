@@ -306,6 +306,11 @@ export class ePlayer {
     if (item.type == "playlist") {
       for (let [i, list] of this.playlists.entries())
         if (list.id == item.id) this.playlists.splice(i, 1);
+      for (let key of Object.keys(this.playlistMap)) {
+        if (this.playlistMap[key] == item.id) {
+          this.playlistMap[key] = "";
+        }
+      }
     } else {
       for (let [i, list] of this.songs.entries())
         if (list.id == item.id) this.songs.splice(i, 1);
@@ -383,6 +388,10 @@ export class ePlayer {
 
   readFile(name) {
     return electron.playerApi.readFile(name);
+  }
+
+  deleteFile(location) {
+    return electron.playerApi.deleteFile(location);
   }
 
   saveProfiles() {

@@ -49,6 +49,7 @@ function Dashboard({ player }) {
     if (isSuccess) {
       toast.info("Scanning Music directory...");
       player.scanMusicDir();
+      player.saveProfiles();
       toast.info("Finish scanning music directory");
     }
     return () => {

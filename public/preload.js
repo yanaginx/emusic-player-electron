@@ -13,6 +13,9 @@ contextBridge.exposeInMainWorld("electron", {
     readFile(name) {
       return ipcRenderer.sendSync("readFile", name);
     },
+    deleteFile(location) {
+      return ipcRenderer.sendSync("deleteFile", location);
+    },
     listenSoundLoaded(callback) {
       ipcRenderer.on("soundLoaded", callback);
     },

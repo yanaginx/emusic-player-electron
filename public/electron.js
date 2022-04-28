@@ -44,6 +44,15 @@ import_electron.ipcMain.on("readFile", (event, name) => {
     event.returnValue = null;
   }
 });
+import_electron.ipcMain.on("deleteFile", (event, location) => {
+  try {
+    import_fs.default.unlinkSync(location);
+    event.returnValue = true;
+  } catch (err) {
+    console.log("\u{1F680} ~ file: electron.js ~ line 43 ~ ipcMain.on ~ err", err);
+    event.returnValue = false;
+  }
+});
 import_electron.ipcMain.on("writeFile", (event, name, data) => {
   if (typeof data != "string") {
     event.returnValue = false;

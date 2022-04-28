@@ -62,8 +62,14 @@ function Sidebar() {
   // playlist display
   const [playlists, setPlaylists] = useState(player.playlists);
 
+  // Playlist display update when there are changes
+  useEffect(() => {
+    setPlaylists(player.playlists);
+  }, [isPlaylistChange]);
+
   const addNewPlaylist = (name) => {
     player.createPlaylist(name);
+    player.saveProfiles();
     setOpenPCModal(false);
     setPlaylists(player.playlists);
     dispatch(setPlaylistChange(!isPlaylistChange));
@@ -73,6 +79,7 @@ function Sidebar() {
   const removePlaylist = (playlist) => {
     setPlaylists(playlists.filter((item) => item.id !== playlist.id));
     player.deleteItem(playlist);
+    player.saveProfiles();
     dispatch(setPlaylistChange(!isPlaylistChange));
   };
 
@@ -227,7 +234,7 @@ function Sidebar() {
                     <MenuItem>
                       <Typography
                         sx={{ overflowY: "auto", width: 100 }}
-                        noWrap="true"
+                        noWrap
                         color="text.secondary"
                       >
                         {playlist.name}

@@ -10,17 +10,24 @@ import {
   MenuItem,
   ListItem,
   Modal,
+  Divider,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { setTrack, reset } from "../features/track/trackSlice";
 import { MdRemove, MdMenu, MdPlaylistAdd } from "react-icons/md";
+import ColoredScrollbars from "./ColoredScrollbars";
 import React from "react";
 
 function SongItem({ player, data, deleteTrack, addToPlaylist }) {
   const [playlists, setPlaylists] = useState(player.playlists);
+  const { isPlaylistChange } = useSelector((state) => state.playlistChange);
+
   const [anchorEl, setAnchorEl] = useState(null);
+  const [bigAnchorEl, setBigAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+  const bigOpen = Boolean(bigAnchorEl);
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -28,12 +35,13 @@ function SongItem({ player, data, deleteTrack, addToPlaylist }) {
     setAnchorEl(null);
   };
 
-  const [bigAnchorEl, setBigAnchorEl] = useState(null);
-  const bigOpen = Boolean(bigAnchorEl);
   const bigHandleClick = (event) => {
+    setAnchorEl(null);
     setBigAnchorEl(event.currentTarget);
   };
   const bigHandleClose = () => {
+    console.log("went HERE");
+    setAnchorEl(null);
     setBigAnchorEl(null);
   };
 
@@ -46,6 +54,17 @@ function SongItem({ player, data, deleteTrack, addToPlaylist }) {
   // console.log("🚀 ~ file: SongItem.jsx ~ line 8 ~ SongItem ~ track", track);
   // console.log("🚀 ~ file: SongItem.jsx ~ line 4 ~ SongItem ~ data", data);
 
+  useEffect(() => {
+    console.log(
+      "🚀 ~ file: SongItem.jsx ~ line 8 ~ useEffect ~ player.playlists.length",
+      player.playlists.length
+    );
+  }, [isPlaylistChange]);
+
+  useEffect(() => {
+    console.log(anchorEl, " : ", bigAnchorEl);
+  }, [anchorEl, bigAnchorEl]);
+
   const setCurrentTrack = () => {
     dispatch(setTrack(data));
     player.togglePlayingChange();
@@ -55,6 +74,7 @@ function SongItem({ player, data, deleteTrack, addToPlaylist }) {
   const removeTrack = () => {
     // popupState.close;
     deleteTrack(data);
+    bigHandleClose();
   };
 
   return (
@@ -75,24 +95,72 @@ function SongItem({ player, data, deleteTrack, addToPlaylist }) {
             <Typography color="text.secondary">{data.author}</Typography>
           </CardContent>
         </CardActionArea>
-        <IconButton onClick={removeTrack}>
+        {/* <IconButton onClick={removeTrack}>
           <MdRemove size={32} />
-        </IconButton>
-        <IconButton onClick={handleClick}>
-          <MdPlaylistAdd size={32} />
+        </IconButton> */}
+        <IconButton onClick={bigHandleClick}>
+          <MdMenu size={32} />
         </IconButton>
         {/* Menu of the popupstate */}
-        <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
-          {player.playlists.map((playlist) => (
-            <MenuItem
-              onClick={() => {
-                addToPlaylist(playlist.id, data);
-                handleClose();
-              }}
-            >
-              {playlist.name}
+        <Menu
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "left",
+          }}
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+          anchorEl={bigAnchorEl}
+          open={bigOpen}
+          onClose={bigHandleClose}
+        >
+          <MenuItem onClick={removeTrack}>
+            Remove this song from library
+          </MenuItem>
+          {player.playlists.length > 0 && (
+            <MenuItem onClick={handleClick}>
+              Add to Playlist
+              <Menu
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "left",
+                }}
+                transformOrigin={{
+                  vertical: "bottom",
+                  horizontal: "right",
+                }}
+                anchorEl={anchorEl}
+                open={open}
+                onClose={bigHandleClose}
+              >
+                <ColoredScrollbars
+                  style={{
+                    width: `150px`,
+                  }}
+                  autoHeight
+                  autoHeightMax={150}
+                >
+                  {player.playlists.map((playlist) => (
+                    <MenuItem
+                      onClick={() => {
+                        addToPlaylist(playlist.id, data);
+                        bigHandleClose();
+                      }}
+                    >
+                      <Typography
+                        sx={{ overflowY: "auto", width: 100 }}
+                        noWrap
+                        color="text.secondary"
+                      >
+                        {playlist.name}
+                      </Typography>
+                    </MenuItem>
+                  ))}
+                </ColoredScrollbars>
+              </Menu>
             </MenuItem>
-          ))}
+          )}
         </Menu>
       </ListItem>
       {/* </Box> */}

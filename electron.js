@@ -35,6 +35,16 @@ ipcMain.on("readFile", (event, name) => {
   }
 });
 
+ipcMain.on("deleteFile", (event, location) => {
+  try {
+    fs.unlinkSync(location);
+    event.returnValue = true;
+  } catch (err) {
+    console.log("🚀 ~ file: electron.js ~ line 43 ~ ipcMain.on ~ err", err);
+    event.returnValue = false;
+  }
+});
+
 ipcMain.on("writeFile", (event, name, data) => {
   if (typeof data != "string") {
     event.returnValue = false;

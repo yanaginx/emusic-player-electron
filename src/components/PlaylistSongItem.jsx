@@ -75,7 +75,19 @@ function PlaylistSongItem({ player, data, deleteTrack, playlist }) {
           <MdMenu size={32} />
         </IconButton>
         {/* Menu of the popupstate */}
-        <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
+        <Menu
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "left",
+          }}
+          transformOrigin={{
+            vertical: "bottom",
+            horizontal: "right",
+          }}
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+        >
           <MenuItem onClick={removeTrack}>Remove from this playlist</MenuItem>
         </Menu>
       </ListItem>

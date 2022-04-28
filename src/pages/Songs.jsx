@@ -19,12 +19,22 @@ function Songs({ player }) {
   // );
 
   const deleteTrack = (data) => {
-    player.deleteItem(data);
-    setAllSongs(allSongs.filter((item) => item.id !== data.id));
+    const deleteStatus = player.deleteFile(data.location);
+    console.log(
+      "🚀 ~ file: Songs.jsx ~ line 16 ~ Songs ~ deleteStatus",
+      deleteStatus
+    );
+    if (deleteStatus) {
+      player.deleteItem(data);
+      setAllSongs(allSongs.filter((item) => item.id !== data.id));
+    }
+    player.saveProfiles();
+    player.scanMusicDir();
   };
 
   const addToPlaylist = (playlistId, data) => {
     player.addToPlaylist(playlistId, data);
+    player.saveProfiles();
   };
 
   return (
