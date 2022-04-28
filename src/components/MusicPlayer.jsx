@@ -87,15 +87,15 @@ function MusicPlayer({ player }) {
   // references
   const audioPlayer = useRef(); // references to the audio components
 
-  // fetching the audio volume from the system by 0.5 second interval
-  useEffect(() => {
-    const interval = setInterval(() => {
-      // TODO
-      // requesting server for volume info
-      dispatch(getVolume());
-    }, 200);
-    return () => clearInterval(interval);
-  }, []);
+  // // fetching the audio volume from the system by 0.5 second interval
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     // TODO
+  //     // requesting server for volume info
+  //     dispatch(getVolume());
+  //   }, 200);
+  //   return () => clearInterval(interval);
+  // }, []);
 
   // callback for metadata
   const onLoadedMetadata = (e) => {
@@ -173,12 +173,12 @@ function MusicPlayer({ player }) {
 
   const handleVolumeChange = (e, value) => {
     setCurrVolume(value);
-    // audioPlayer.current.volume = value / 100;
-    dispatch(
-      setVolume({
-        volume: value,
-      })
-    );
+    audioPlayer.current.volume = value / 100;
+    // dispatch(
+    //   setVolume({
+    //     volume: value,
+    //   })
+    // );
   };
 
   const handlePositionChange = (e, value) => {
@@ -316,17 +316,11 @@ function MusicPlayer({ player }) {
             alignItems="center"
           >
             {(() => {
-              if (systemVolume?.volume === 0) {
+              if (currVolume === 0) {
                 return <MdVolumeOff size={32} />;
-              } else if (
-                systemVolume?.volume > 0 &&
-                systemVolume?.volume <= 25
-              ) {
+              } else if (currVolume > 0 && currVolume <= 25) {
                 return <MdVolumeMute size={32} />;
-              } else if (
-                systemVolume?.volume > 25 &&
-                systemVolume?.volume <= 50
-              ) {
+              } else if (currVolume > 25 && currVolume <= 50) {
                 return <MdVolumeDown size={32} />;
               } else {
                 return <MdVolumeUp size={32} />;
@@ -334,7 +328,7 @@ function MusicPlayer({ player }) {
             })()}
             <Slider
               aria-label="Volume"
-              value={systemVolume ? systemVolume.volume : 0}
+              value={currVolume}
               onChange={handleVolumeChange}
             />
           </Stack>
