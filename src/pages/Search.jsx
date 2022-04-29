@@ -13,7 +13,11 @@ import { MdSearch } from "react-icons/md";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { resetSearch, searchSongs } from "../features/search/searchSlice";
+import {
+  resetDownload,
+  resetSearch,
+  searchSongs,
+} from "../features/search/searchSlice";
 
 import SearchResult from "../components/SearchResult";
 import { toast } from "react-toastify";
@@ -48,6 +52,7 @@ function Search({ player }) {
       player.saveProfiles();
       toast.dismiss();
       toast.success(downloadMessage.message);
+      dispatch(resetDownload());
     }
   }, [isSuccessDownload]);
 
@@ -117,7 +122,7 @@ function Search({ player }) {
         // <List sx={{ paddingTop: `10px`, height: `420px`, overflowY: "auto" }}>
         <ColoredScrollbars style={{ height: "420px" }}>
           {searchResult?.map((song) => (
-            <SearchResult data={song} player={player} />
+            <SearchResult key={song.id} data={song} player={player} />
           ))}
         </ColoredScrollbars>
       )}

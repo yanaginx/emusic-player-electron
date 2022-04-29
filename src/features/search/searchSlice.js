@@ -54,6 +54,12 @@ export const searchSlice = createSlice({
   initialState,
   reducers: {
     resetSearch: (state) => initialState,
+    resetDownload: (state) => {
+      state.isErrorDownload = false;
+      state.isLoadingDownload = false;
+      state.isSuccessDownload = false;
+      state.downloadMessage = "";
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -87,5 +93,5 @@ export const searchSlice = createSlice({
   },
 });
 
-export const { resetSearch } = searchSlice.actions;
+export const { resetSearch, resetDownload } = searchSlice.actions;
 export default searchSlice.reducer;

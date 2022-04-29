@@ -18,6 +18,7 @@ import { resetSearch, downloadSong } from "../features/search/searchSlice";
 import { setTrack, reset } from "../features/track/trackSlice";
 
 function SearchResult({ player, data }) {
+  const { isLoadingDownload } = useSelector((state) => state.search);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -68,9 +69,13 @@ function SearchResult({ player, data }) {
         </CardContent>
       </CardActionArea>
 
-      <IconButton>
-        <MdDownload onClick={handleDownload} size={32} />
-      </IconButton>
+      {isLoadingDownload ? (
+        <></>
+      ) : (
+        <IconButton onClick={handleDownload}>
+          <MdDownload size={32} />
+        </IconButton>
+      )}
     </ListItem>
   );
 }

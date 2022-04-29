@@ -40,7 +40,6 @@ function SongItem({ player, data, deleteTrack, addToPlaylist }) {
     setBigAnchorEl(event.currentTarget);
   };
   const bigHandleClose = () => {
-    console.log("went HERE");
     setAnchorEl(null);
     setBigAnchorEl(null);
   };

@@ -312,12 +312,17 @@ export class ePlayer {
         }
       }
     } else {
-      for (let [i, list] of this.songs.entries())
+      for (let [i, list] of this.songs.entries()) {
+        console.log("Song FOUND!");
         if (list.id == item.id) this.songs.splice(i, 1);
+      }
 
-      for (let [i, list] of this.playlists.entries())
-        if (list.content.includes(item.id))
-          list.content.splice(list.content.indexOf(item.id), 1);
+      for (let list of this.playlists) {
+        for (let [i, track] of list.content.entries())
+          if (item.id == track.id) {
+            list.content.splice(i, 1);
+          }
+      }
     }
   }
 

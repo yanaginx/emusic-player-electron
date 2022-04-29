@@ -84,6 +84,7 @@ function PlaylistSongs({ player }) {
 
   const deleteTrack = (data) => {
     player.removeFromPlaylist(playlistId, data);
+    player.saveProfiles();
     // setPlaylist(player.playlists.find((playlist) => playlist.id == playlistId));
     setAllSongs(allSongs.filter((item) => item.id !== data.id));
   };

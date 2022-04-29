@@ -58,7 +58,7 @@ function Songs({ player }) {
         <ColoredScrollbars style={{ height: 460 }}>
           {allSongs.map((songData) => (
             <SongItem
-              key={songData.id.toString()}
+              key={songData.id}
               data={songData}
               player={player}
               deleteTrack={deleteTrack}
