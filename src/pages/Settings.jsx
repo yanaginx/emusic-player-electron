@@ -17,9 +17,17 @@ import {
   Switch,
   Tab,
   Tabs,
+  Stack,
+  LinearProgress,
 } from "@mui/material";
 import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import {
+  MdSignalWifiStatusbar1Bar,
+  MdSignalWifiStatusbar2Bar,
+  MdSignalWifiStatusbar3Bar,
+  MdSignalWifi4Bar,
+} from "react-icons/md";
 import {
   getNetworks,
   connectToNetwork,
@@ -164,6 +172,9 @@ function Settings({ player }) {
     console.log("[DEBUG] info: ", info);
     setCurrSsid("");
     setCurrPassword("");
+    if (connection) {
+      dispatch(disconnectFromNetwork());
+    }
     dispatch(connectToNetwork(info));
     handleConnectModalClose();
   };
@@ -446,29 +457,54 @@ function Settings({ player }) {
         <TabPanel value={value} index={2}>
           {/* Options for wifi setup  */}
           <>
-            <Typography marginBottom={2} variant="h5">
-              Wifi setup
-            </Typography>
-            <Button onClick={onGetNetworks}>Get all connections</Button>
-            {isLoadingConnect ? (
-              <CircularProgress />
-            ) : (
-              <>
-                {connection ? (
-                  <>
-                    <Typography color="primary">
-                      {connection[0].ssid}
-                    </Typography>
-                    <Button onClick={onDisconnect}>Disconnect</Button>
-                  </>
-                ) : (
-                  <></>
-                )}
-              </>
-            )}
+            <Stack
+              direction="row"
+              justifyContent="space-between"
+              alignItems="center"
+              spacing={2}
+              sx={{ my: 2, mx: 2 }}
+            >
+              <Typography marginBottom={2} variant="h5">
+                Wifi setup
+              </Typography>
+
+              <Button marginRight={2} onClick={onGetNetworks}>
+                Get all connections
+              </Button>
+            </Stack>
+
+            <Stack
+              direction="row"
+              justifyContent="space-around"
+              alignItems="center"
+              spacing={2}
+            >
+              {isLoadingConnect ? (
+                <CircularProgress />
+              ) : (
+                <>
+                  {connection ? (
+                    <>
+                      <Typography color="primary">
+                        {connection[0].ssid}
+                      </Typography>
+                      <Button
+                        variant="outlined"
+                        color="error"
+                        onClick={onDisconnect}
+                      >
+                        Disconnect
+                      </Button>
+                    </>
+                  ) : (
+                    <></>
+                  )}
+                </>
+              )}
+            </Stack>
             {isLoading ? (
               <>
-                <CircularProgress />
+                <LinearProgress />
               </>
             ) : (
               <List>
@@ -479,10 +515,25 @@ function Settings({ player }) {
                         handleConnectModalOpen(connection.ssid);
                       }}
                     >
-                      <CardContent>
-                        <Typography gutterBottom>
-                          {connection.ssid} + {connection.quality}
-                        </Typography>
+                      <CardContent
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <Typography gutterBottom>{connection.ssid}</Typography>
+                        {(() => {
+                          if (connection.quality <= 25) {
+                            return <MdSignalWifiStatusbar1Bar />;
+                          } else if (connection.quality <= 50) {
+                            return <MdSignalWifiStatusbar2Bar />;
+                          } else if (connection.quality <= 75) {
+                            return <MdSignalWifiStatusbar3Bar />;
+                          } else {
+                            return <MdSignalWifi4Bar />;
+                          }
+                        })()}
                       </CardContent>
                     </CardActionArea>
                   </ListItem>
@@ -497,11 +548,11 @@ function Settings({ player }) {
             aria-describedby="parent-modal-description"
           >
             <Box sx={{ ...modalStyle }}>
-              <Typography sx={{ my: 1 }} variant="h4">
+              <Typography sx={{ my: 1 }} variant="h6">
                 Connect to wifi network
               </Typography>
               <Typography sx={{ my: 1 }} variant="body1">
-                {currSsid}
+                SSID: {currSsid}
               </Typography>
               <TextField
                 fullWidth
@@ -510,6 +561,7 @@ function Settings({ player }) {
                 type="password"
                 value={currPassword}
                 onChange={(e) => setCurrPassword(e.target.value)}
+                sx={{ marginBottom: 2 }}
               />
               <Button
                 onClick={() => {
