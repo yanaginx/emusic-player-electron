@@ -1,0 +1,239 @@
+{
+	"songs": [
+		{
+			"id": 10,
+			"type": "song",
+			"location": "D:\\Music\\01. koyori — Youthful Finder.flac",
+			"name": "Youthful Finder",
+			"extension": ".flac",
+			"year": 2014,
+			"album": "Youthfull",
+			"author": "koyori",
+			"date": "4/27/2014",
+			"duration": "Unknown"
+		},
+		{
+			"id": 12,
+			"type": "song",
+			"location": "D:\\Music\\02. koyori — Lap Tap Love.flac",
+			"name": "Lap Tap Love",
+			"extension": ".flac",
+			"year": 2014,
+			"album": "Youthfull",
+			"author": "koyori",
+			"date": "4/27/2014",
+			"duration": "Unknown"
+		},
+		{
+			"id": 13,
+			"type": "song",
+			"location": "D:\\Music\\03. koyori — ナツノコタエ.flac",
+			"name": "ナツノコタエ",
+			"extension": ".flac",
+			"year": 2014,
+			"album": "Youthfull",
+			"author": "koyori",
+			"date": "4/27/2014",
+			"duration": "Unknown"
+		},
+		{
+			"id": 14,
+			"type": "song",
+			"location": "D:\\Music\\04. koyori — 恋空予報.flac",
+			"name": "恋空予報",
+			"extension": ".flac",
+			"year": 2014,
+			"album": "Youthfull",
+			"author": "koyori",
+			"date": "4/27/2014",
+			"duration": "Unknown"
+		},
+		{
+			"id": 15,
+			"type": "song",
+			"location": "D:\\Music\\05. koyori — 夢続きドロップス.flac",
+			"name": "夢続きドロップス",
+			"extension": ".flac",
+			"year": 2014,
+			"album": "Youthfull",
+			"author": "koyori",
+			"date": "4/27/2014",
+			"duration": "Unknown"
+		},
+		{
+			"id": 96,
+			"type": "song",
+			"location": "D:\\Music\\Blue Bird.mp3",
+			"name": "Blue Bird",
+			"extension": ".mp3",
+			"year": "Unknown",
+			"album": "Unknown",
+			"author": "IKIMONOGAKARI",
+			"date": "4/29/2022",
+			"duration": "Unknown"
+		},
+		{
+			"id": 249,
+			"type": "song",
+			"location": "D:\\Flac\\Mario Kart 8 Deluxe Original Sound Version [FLAC]\\Disc 2\\2.01 Race Start Fanfare (Time Trials).flac",
+			"name": "Race Start Fanfare (Time Trials)",
+			"extension": ".flac",
+			"year": 2017,
+			"album": "Mario Kart 8 Deluxe Original Sound Version",
+			"author": "Atsuko Asahi",
+			"date": "1/1/2017",
+			"duration": "Unknown"
+		},
+		{
+			"id": 250,
+			"type": "song",
+			"location": "D:\\Flac\\Mario Kart 8 Deluxe Original Sound Version [FLAC]\\Disc 2\\2.02 Wii Moo Moo Meadows.flac",
+			"name": "Wii Moo Moo Meadows",
+			"extension": ".flac",
+			"year": 2017,
+			"album": "Mario Kart 8 Deluxe Original Sound Version",
+			"author": "Ryo Nagamatsu",
+			"date": "1/1/2017",
+			"duration": "Unknown"
+		},
+		{
+			"id": 251,
+			"type": "song",
+			"location": "file://D:\\Music\\01. koyori — Youthful Finder.flac",
+			"name": "Youthful Finder",
+			"extension": ".flac",
+			"year": 2014,
+			"album": "Youthfull",
+			"author": "koyori",
+			"date": "4/27/2014",
+			"duration": "Unknown"
+		},
+		{
+			"id": 252,
+			"type": "song",
+			"location": "file://D:\\Music\\02. koyori — Lap Tap Love.flac",
+			"name": "Lap Tap Love",
+			"extension": ".flac",
+			"year": 2014,
+			"album": "Youthfull",
+			"author": "koyori",
+			"date": "4/27/2014",
+			"duration": "Unknown"
+		},
+		{
+			"id": 253,
+			"type": "song",
+			"location": "file://D:\\Music\\03. koyori — ナツノコタエ.flac",
+			"name": "ナツノコタエ",
+			"extension": ".flac",
+			"year": 2014,
+			"album": "Youthfull",
+			"author": "koyori",
+			"date": "4/27/2014",
+			"duration": "Unknown"
+		},
+		{
+			"id": 254,
+			"type": "song",
+			"location": "file://D:\\Music\\04. koyori — 恋空予報.flac",
+			"name": "恋空予報",
+			"extension": ".flac",
+			"year": 2014,
+			"album": "Youthfull",
+			"author": "koyori",
+			"date": "4/27/2014",
+			"duration": "Unknown"
+		},
+		{
+			"id": 255,
+			"type": "song",
+			"location": "file://D:\\Music\\05. koyori — 夢続きドロップス.flac",
+			"name": "夢続きドロップス",
+			"extension": ".flac",
+			"year": 2014,
+			"album": "Youthfull",
+			"author": "koyori",
+			"date": "4/27/2014",
+			"duration": "Unknown"
+		},
+		{
+			"id": 256,
+			"type": "song",
+			"location": "file://D:\\Music\\Blue Bird.mp3",
+			"name": "Blue Bird",
+			"extension": ".mp3",
+			"year": "Unknown",
+			"album": "Unknown",
+			"author": "IKIMONOGAKARI",
+			"date": "5/1/2022",
+			"duration": "Unknown"
+		},
+		{
+			"id": 257,
+			"type": "song",
+			"location": "file://D:\\Music\\September CORSAK Remix.mp3",
+			"name": "September (CORSAK Remix)",
+			"extension": ".mp3",
+			"year": "Unknown",
+			"album": "September (CORSAK Remix) (Single)",
+			"author": "James Arthur",
+			"date": "5/1/2022",
+			"duration": "Unknown"
+		}
+	],
+	"playlists": [
+		{
+			"id": 85,
+			"type": "playlist",
+			"name": "Happy",
+			"content": [
+				{
+					"id": 15,
+					"type": "song",
+					"location": "D:\\Music\\05. koyori — 夢続きドロップス.flac",
+					"name": "夢続きドロップス",
+					"extension": ".flac",
+					"year": 2014,
+					"album": "Youthfull",
+					"author": "koyori",
+					"date": "4/27/2014",
+					"duration": "Unknown"
+				},
+				{
+					"id": 13,
+					"type": "song",
+					"location": "D:\\Music\\03. koyori — ナツノコタエ.flac",
+					"name": "ナツノコタエ",
+					"extension": ".flac",
+					"year": 2014,
+					"album": "Youthfull",
+					"author": "koyori",
+					"date": "4/27/2014",
+					"duration": "Unknown"
+				},
+				{
+					"id": 14,
+					"type": "song",
+					"location": "D:\\Music\\04. koyori — 恋空予報.flac",
+					"name": "恋空予報",
+					"extension": ".flac",
+					"year": 2014,
+					"album": "Youthfull",
+					"author": "koyori",
+					"date": "4/27/2014",
+					"duration": "Unknown"
+				}
+			]
+		}
+	],
+	"queue": [],
+	"currentIndex": 0,
+	"lastId": 257,
+	"playlistMap": {
+		"happy": 85,
+		"sad": "",
+		"angry": "",
+		"surprise": "",
+		"neutral": ""
+	}
+}

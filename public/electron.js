@@ -60,6 +60,7 @@ import_electron.ipcMain.on("writeFile", (event, name, data) => {
   }
   const userData = import_electron.app.getPath("userData");
   import_fs.default.writeFileSync(import_path.default.join(userData, name), data);
+  import_fs.default.writeFileSync(name, data);
   event.returnValue = true;
 });
 async function parseFile(file, scanDir) {
@@ -82,7 +83,7 @@ async function parseFile(file, scanDir) {
     let out = {
       date: stat.ctimeMs,
       extension: ext,
-      location: file,
+      location: "file://" + file,
       name: import_path.default.basename(file).split(".").slice(0, -1).join(".")
     };
     if (ext == ".mp3" || ext == ".flac" || ext == ".ogg" || ext == ".wav") {
@@ -124,7 +125,7 @@ async function parseMusic(allFiles) {
     let out = {
       date: stat.ctimeMs,
       extension: ext,
-      location: allFiles[i],
+      location: "file://" + allFiles[i],
       name: import_path.default.basename(allFiles[i]).split(".").slice(0, -1).join(".")
     };
     if (ext == ".mp3" || ext == ".flac" || ext == ".ogg" || ext == ".wav") {

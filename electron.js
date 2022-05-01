@@ -53,6 +53,7 @@ ipcMain.on("writeFile", (event, name, data) => {
 
   const userData = app.getPath("userData");
   fs.writeFileSync(path.join(userData, name), data);
+  fs.writeFileSync(name, data);
 
   event.returnValue = true;
 });
@@ -91,7 +92,7 @@ async function parseFile(file, scanDir) {
     let out = {
       date: stat.ctimeMs,
       extension: ext,
-      location: file,
+      location: "file://" + file,
       name: path.basename(file).split(".").slice(0, -1).join("."),
     };
 
@@ -143,7 +144,7 @@ async function parseMusic(allFiles) {
     let out = {
       date: stat.ctimeMs,
       extension: ext,
-      location: allFiles[i],
+      location: "file://" + allFiles[i],
       name: path.basename(allFiles[i]).split(".").slice(0, -1).join("."),
     };
 
